@@ -161,4 +161,4 @@ def get_test_dataset(config, transform):
     test_dataset = TestDataset(config["data_root"], transform)
     test_loader = torch.utils.data.DataLoader(test_dataset, batch_size = config["batch_size"], shuffle=False)
 
-    return test_loader
+    return test_dataset, test_loader

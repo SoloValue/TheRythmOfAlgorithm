@@ -26,7 +26,7 @@ transform = T.Compose([
     ])
 
 full_dataset, train_loader, val_loader = get_train_dataset(config["train_dataset"], config["training"]["loss_function"], transform)
-test_loader = get_test_dataset(config["test_dataset"], transform)
+_, test_loader = get_test_dataset(config["test_dataset"], transform)
 
 wandb.init(
         # Set the project where this run will be logged
