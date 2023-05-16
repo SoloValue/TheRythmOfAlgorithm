@@ -1,0 +1,44 @@
+{
+    "os": "Windows-10-10.0.19045-SP0",
+    "python": "3.11.0",
+    "heartbeatAt": "2023-05-16T13:29:48.993376",
+    "startedAt": "2023-05-16T13:29:47.412954",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "d:\\Matteo\\DataScience\\II semester\\introduction ML\\azure_dir\\model_selection.py",
+    "codePath": "model_selection.py",
+    "host": "Matteo",
+    "username": "matte",
+    "executable": "D:\\Programmi\\Python\\python.exe",
+    "cpu_count": 4,
+    "cpu_count_logical": 8,
+    "cpu_freq": {
+        "current": 2592.0,
+        "min": 0.0,
+        "max": 2592.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 2592.0,
+            "min": 0.0,
+            "max": 2592.0
+        }
+    ],
+    "disk": {
+        "total": 918.8281211853027,
+        "used": 369.1278076171875
+    },
+    "gpu": "NVIDIA GeForce GTX 965M",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA GeForce GTX 965M",
+            "memory_total": 4294967296
+        }
+    ],
+    "memory": {
+        "total": 15.892364501953125
+    }
+}
