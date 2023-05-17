@@ -139,6 +139,11 @@ class TestDataset(torch.utils.data.Dataset):
 
         return image
     
+class TestLoader(torch.utils.data.DataLoader):
+    def __init__(self, dataset, batch_size, shuffle):
+        super(TestLoader, self).__init__(dataset, batch_size=batch_size, shuffle=shuffle)
+        self.img_names = dataset.img_names
+    
 def get_train_dataset(config, loss_function, transform):
     if loss_function == "MSE":
         full_dataset = MSE_Dataset(config["data_root"], transform)
@@ -159,6 +164,6 @@ def get_train_dataset(config, loss_function, transform):
 
 def get_test_dataset(config, transform):
     test_dataset = TestDataset(config["data_root"], transform)
-    test_loader = torch.utils.data.DataLoader(test_dataset, batch_size = config["batch_size"], shuffle=False)
+    test_loader = TestLoader(test_dataset, batch_size = config["batch_size"], shuffle=False)
 
     return test_dataset, test_loader

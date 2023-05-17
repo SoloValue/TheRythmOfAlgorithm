@@ -159,18 +159,23 @@ class UnsupervisedTransferLearnTrainer:
             "2" : []
         }
 
-        for i,image in enumerate(data_loader):
-            if image[0] in ["g", "q"]:
+        for i, img_name in enumerate(data_loader.img_names):
+            if img_name[0] in ["g", "q"]:
                 labels["1"].append(i)
             else:
                 labels["2"].append(i)
         
         ck = 0     # sum of correct amatches among top-k ranking
         for i in index_list:
-            while i in labels["1"]:
+            if i in labels["1"]:
                 ck += 1
+            else:
+                break
         
-        test_error = 1-(ck / len(labels["1"]))
+        if len(labels["1"]) > 0:
+            test_error = 1-(ck / len(labels["1"]))
+        else:
+            test_error = -1
 
         return distance_list, indices_list, test_error
 

@@ -1,6 +1,6 @@
 general:
   img_size: 228
-  project_name: "model_selection"
+  project_name: "prova"
 
 model:
   architecture: resnet18
@@ -10,7 +10,7 @@ model:
 training:
   optimizer: adam
   learning_rate: 0.0001
-  max_epochs: 20
+  max_epochs: 3
   save_checkpoint_every: 3
   early_stopping_patience: 8
   model_path: "./saved_models/"
@@ -18,7 +18,7 @@ training:
 
 train_dataset:
   data_root: './train_gallery/'
-  batch_size: 128
+  batch_size: 4
 
 test_dataset:
   data_root: './test_gallery/'
