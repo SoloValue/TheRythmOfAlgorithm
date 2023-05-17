@@ -151,11 +151,28 @@ class UnsupervisedTransferLearnTrainer:
         distance_list, indices_list = knn.kneighbors(target_embedding, return_distance=True)
         indices_list = indices_list.tolist()
 
-        error = "newcode"
+        index_list = indices_list[0]
 
-        normalized_err = error/100
+        ######################## ELISA & SARA #############################
+        labels = {
+            "1" : [],
+            "2" : []
+        }
 
-        return distance_list, indices_list, normalized_err
+        for i,image in enumerate(data_loader):
+            if image[0] in ["g", "q"]:
+                labels["1"].append(i)
+            else:
+                labels["2"].append(i)
+        
+        ck = 0     # sum of correct amatches among top-k ranking
+        for i in index_list:
+            while i in labels["1"]:
+                ck += 1
+        
+        accuracy = ck / len(labels["1"])
+
+        return distance_list, indices_list, accuracy
 
     def train(self, train_loader, val_loader, test_loader):
 
