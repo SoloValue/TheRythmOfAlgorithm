@@ -151,32 +151,7 @@ class UnsupervisedTransferLearnTrainer:
         distance_list, indices_list = knn.kneighbors(target_embedding, return_distance=True)
         indices_list = indices_list.tolist()
 
-        index_list = indices_list[0]
-        error = 0
-        if index_list[0] != 0 :
-            error += 40
-        if index_list[1] != 1:
-            error += 40
-        
-        if index_list[2] not in [2,3] :
-            error += 10
-        if index_list[3] not in [2,3]:
-            error += 10
-
-        if index_list[4] not in [3,4,5]:
-            error += 10
-        
-        if index_list[5] not in [4,5,6,7] :
-            error += 10
-        if index_list[6] not in [4,5,6,7]:
-            error += 10
-        if index_list[7] not in [4,5,6,7]:
-            error += 10
-
-        if index_list[8] not in [8,9]:
-            error += 10
-        if index_list[9] not in [8,9]:
-            error += 10
+        error = "newcode"
 
         normalized_err = error/100
 
