@@ -170,9 +170,9 @@ class UnsupervisedTransferLearnTrainer:
             while i in labels["1"]:
                 ck += 1
         
-        accuracy = ck / len(labels["1"])
+        test_error = 1-(ck / len(labels["1"]))
 
-        return distance_list, indices_list, accuracy
+        return distance_list, indices_list, test_error
 
     def train(self, train_loader, val_loader, test_loader):
 
