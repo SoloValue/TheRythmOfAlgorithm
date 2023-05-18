@@ -54,4 +54,3 @@ trainer = UnsupervisedTransferLearnTrainer(encoder, config["training"])
 trainer.SetupTrain()
 trainer.train(train_loader, val_loader, test_loader)
 
-wandb.finish()
