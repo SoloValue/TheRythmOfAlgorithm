@@ -1,6 +1,7 @@
 import numpy as np
 import random
 import torch
+import matplotlib.pyplot as plt
 
 def seed_everything(seed=0):
 
@@ -10,3 +11,4 @@ def seed_everything(seed=0):
 
 def get_rand():
     return random.randint(1,100)
+

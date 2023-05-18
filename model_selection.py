@@ -24,7 +24,7 @@ transform = T.Compose([
     T.ToTensor(),
     T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]), #normalization for the ResNet18
     ])
-
+      
 list_loss_function = [
         "triplet",
         "MSE"
@@ -90,13 +90,11 @@ for loss_funct in list_loss_function:
 
         encoder.cuda()
         
-        
 
         trainer = UnsupervisedTransferLearnTrainer(encoder, config["training"])
         trainer.SetupTrain()
         trainer.train(train_loader, val_loader, test_loader)
-            
 
         wandb.finish()
-        
-    
+
+
