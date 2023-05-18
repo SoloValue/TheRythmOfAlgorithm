@@ -31,6 +31,7 @@ list_loss_function = [
 ]
 
 list_model_type = [
+        "CNNencoder",
         "ResNet18",
         "PerResNet18",
         "ResNet101",
