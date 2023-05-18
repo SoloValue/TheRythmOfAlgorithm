@@ -126,58 +126,70 @@ class UnsupervisedTransferLearnTrainer:
 
         return cumulative_loss / samples
     
-    def test_step(self, data_loader):
+    def test_step(self, data_loader: TestLoader):
         self.model.eval()
 
-        embedding = None
-        target_embedding = None
+        img_names = data_loader.img_names
 
-        with torch.no_grad():
-            for i,image in enumerate(data_loader):
-                image = image.cuda()
-                image_enc = self.model(image).cpu()
-                if i==0: 
-                    embedding = image_enc
-                    target_embedding = image_enc
+        target_letters = ['a', 'b', 'c', 'd', 'e']
+        tot_test_error = 0
+        for target_letter in target_letters:
+            test_error = 0
+            target_index = [img_names.index(nome) for nome in img_names if nome[0]==target_letter and nome[1]=='0'][0]
+
+            embedding = None
+            target_embedding = None
+
+            with torch.no_grad():
+                for i,image in enumerate(data_loader):
+                    image = image.cuda()
+                    image_enc = self.model(image).cpu()
+                    if i == target_index:
+                        target_embedding = image_enc
+
+                    if i==0: 
+                        embedding = image_enc
+                    else:
+                        embedding = torch.cat((embedding, image_enc), 0)
+            
+            embedding = embedding.cpu().detach().numpy()
+            target_embedding = target_embedding.cpu().detach().numpy()
+
+            knn = NearestNeighbors(n_neighbors=5, metric="cosine")
+            knn.fit(embedding)
+
+            distance_list, indices_list = knn.kneighbors(target_embedding, return_distance=True)
+            indices_list = indices_list.tolist()
+
+            index_list = indices_list[0]
+
+            ######################## ELISA & SARA #############################
+            labels = {
+                "1" : [],
+                "2" : []
+            }
+
+            for i, img_name in enumerate(img_names):
+                if img_name[0] == target_letter:
+                    labels["1"].append(i)
                 else:
-                    embedding = torch.cat((embedding, image_enc), 0)
-        
-        embedding = embedding.cpu().detach().numpy()
-        target_embedding = target_embedding.cpu().detach().numpy()
-
-        knn = NearestNeighbors(n_neighbors=10, metric="cosine")
-        knn.fit(embedding)
-
-        distance_list, indices_list = knn.kneighbors(target_embedding, return_distance=True)
-        indices_list = indices_list.tolist()
-
-        index_list = indices_list[0]
-
-        ######################## ELISA & SARA #############################
-        labels = {
-            "1" : [],
-            "2" : []
-        }
-
-        for i, img_name in enumerate(data_loader.img_names):
-            if img_name[0] in ["g", "q"]:
-                labels["1"].append(i)
+                    labels["2"].append(i)
+            
+            ck = 0     # sum of correct amatches among top-k ranking
+            for i in index_list:
+                if i in labels["1"]:
+                    ck += 1
+                #else:
+                #    break
+            
+            if len(labels["1"]) > 0:
+                test_error = 1-(ck / len(labels["1"]))
             else:
-                labels["2"].append(i)
-        
-        ck = 0     # sum of correct amatches among top-k ranking
-        for i in index_list:
-            if i in labels["1"]:
-                ck += 1
-            else:
-                break
-        
-        if len(labels["1"]) > 0:
-            test_error = 1-(ck / len(labels["1"]))
-        else:
-            test_error = -1
+                test_error = -1
 
-        return distance_list, indices_list, test_error
+            tot_test_error += test_error
+
+        return distance_list, indices_list, tot_test_error/len(target_letters)
 
     def train(self, train_loader, val_loader, test_loader):
 
