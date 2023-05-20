@@ -230,4 +230,21 @@ class UnsupervisedTransferLearnTrainer:
                 self.trigger = 0
             print('-----------------------------------------------------')
             # ===========================================
-        print(f"\t...end of training")
+            print(f"\t...end of training")
+    
+#AGGIUNTE PER TROVARE BEST MODEL AMONG EVERYONE
+
+class ModelCheckPoint:
+    def __init__(self, config):
+        self.config = config
+        self.save_path = config['training']['model_path']
+        self.best_loss = train(self.best_loss)
+            
+    def save_model(self, config):
+           if config['training']['loss_function'] < self.best_loss:
+                self.best_loss = config['training']['loss_function']
+                torch.save(model.state_dict(), self.save_path)
+                
+    def load_best_model(self, model):
+        model.load_state_dict(torch.load(self.save_path))
+        return model
