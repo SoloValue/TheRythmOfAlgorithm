@@ -75,23 +75,17 @@ for loss_funct in list_loss_function:
         #rsync -r -e 'ssh -p 61099' azure_dir/ disi@ml-lab-55bc589a-5fd7-4f52-b071-64c2815e9b95.westeurope.cloudapp.azure.com:/home/disi/ML_project
 
         if model_type == "CNNencoder": 
-            encoder = CNNencoder(config["model"])
-            
+            encoder = CNNencoder() 
         elif model_type == "PerResNet18": 
-            encoder = PersonalizedResNet18(config["model"])
-            
+            encoder = PersonalizedResNet18(config["model"]) 
         elif model_type == "ResNet18":
-            encoder = ResNet18(config["model"])
-            
+            encoder = ResNet18(config["model"]) 
         elif model_type == "PerResNet101": 
             encoder = PersonalizedResNet101(config["model"])
-            
         elif model_type == "ResNet101":
-            encoder = ResNet101(config["model"])
-            
+            encoder = ResNet101(config["model"])            
         elif model_type == "VGG16_BN":
-             encoder = VGG16_BN(config["model"])
-             
+             encoder = VGG16_BN(config["model"])             
         elif model_type == "PerVGG16_BN":
              encoder = PersonalizedVGG16_BN(config["model"])
              
@@ -109,5 +103,3 @@ for loss_funct in list_loss_function:
 ####
 
         wandb.finish()
-
-
