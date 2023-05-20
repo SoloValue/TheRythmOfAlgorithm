@@ -171,3 +171,6 @@ class PersonalizedVGG16_BN(torch.nn.Module):
     @torch.no_grad()
     def inference(self, x):
         return self.net(x)
+
+
+

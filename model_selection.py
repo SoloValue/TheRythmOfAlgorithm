@@ -76,18 +76,25 @@ for loss_funct in list_loss_function:
 
         if model_type == "CNNencoder": 
             encoder = CNNencoder(config["model"])
+            
         elif model_type == "PerResNet18": 
             encoder = PersonalizedResNet18(config["model"])
+            
         elif model_type == "ResNet18":
             encoder = ResNet18(config["model"])
+            
         elif model_type == "PerResNet101": 
             encoder = PersonalizedResNet101(config["model"])
+            
         elif model_type == "ResNet101":
             encoder = ResNet101(config["model"])
+            
         elif model_type == "VGG16_BN":
              encoder = VGG16_BN(config["model"])
+             
         elif model_type == "PerVGG16_BN":
              encoder = PersonalizedVGG16_BN(config["model"])
+             
 
         encoder.cuda()
         
@@ -95,6 +102,7 @@ for loss_funct in list_loss_function:
         trainer = UnsupervisedTransferLearnTrainer(encoder, config["training"])
         trainer.SetupTrain()
         trainer.train(train_loader, val_loader, test_loader)
+        
 
         wandb.finish()
 
