@@ -63,7 +63,7 @@ for loss_funct in list_loss_function:
                 # Track hyperparameters and run metadata
                 config={
                 "learning_rate": config["training"]["learning_rate"],
-                "architecture": "ResNet18",
+                "architecture": model_type,
                 "dataset": "UTKFace",
                 "dataset_size": len(full_dataset),
                 "epochs": config["training"]["max_epochs"],
