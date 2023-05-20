@@ -194,7 +194,7 @@ class UnsupervisedTransferLearnTrainer:
     def train(self, train_loader, val_loader, test_loader):
 
         # For each epoch, train the network and then compute evaluation results
-        best_val_loss = 9999.9
+        best_test_loss = 9999.9
         print(f"\tStart training...")
 
         for e in range(self.max_epochs):
@@ -213,11 +213,11 @@ class UnsupervisedTransferLearnTrainer:
             })
 
             # Save the model checkpoints
-            if e % self.save_checkpoint_every == 0 or e == (self.max_epochs - 1):  # if the current epoch is in the interval, or is the last epoch -> save
-                self.save(e, is_best=False)                
+            #if e % self.save_checkpoint_every == 0 or e == (self.max_epochs - 1):  # if the current epoch is in the interval, or is the last epoch -> save
+            #    self.save(e, is_best=False)                
 
             # Early Stopping
-            if val_loss > best_val_loss:
+            if test_loss > best_test_loss:
                 self.trigger += 1
                 if self.trigger == self.early_stopping_patience:
                     print(f"Validation Accuracy did not improve for {self.early_stopping_patience} epochs. Killing the training...")
@@ -226,7 +226,7 @@ class UnsupervisedTransferLearnTrainer:
                 # update the best val loss so far
                 self.save(e, is_best=True)
                 print("\t...saving best model...")
-                best_val_loss = val_loss
+                best_test_loss = test_loss
                 self.trigger = 0
             print('-----------------------------------------------------')
             # ===========================================
