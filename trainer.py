@@ -230,7 +230,4 @@ class UnsupervisedTransferLearnTrainer:
                 self.trigger = 0
             print('-----------------------------------------------------')
             # ===========================================
-            print(f"\t...end of training")
-    
-    
-        
+        print(f"\t...end of training")
