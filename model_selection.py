@@ -89,17 +89,11 @@ for loss_funct in list_loss_function:
         elif model_type == "PerVGG16_BN":
              encoder = PersonalizedVGG16_BN(config["model"])
              
-
         encoder.cuda()
         
-
         trainer = UnsupervisedTransferLearnTrainer(encoder, config["training"])
         trainer.SetupTrain()
         trainer.train(train_loader, val_loader, test_loader)
-#AGGIUNTA PER BEST MODEL
-        trainer = ModelCheckPoint(config['training'])
-        trainer.save_model(config['training'])
-        trainer.load_best_model(model)
-####
+        
 
         wandb.finish()
