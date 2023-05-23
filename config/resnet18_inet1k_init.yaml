@@ -1,6 +1,5 @@
 general:
   img_size: 228
-  project_name: "prova"
 
 model:
   architecture: resnet18

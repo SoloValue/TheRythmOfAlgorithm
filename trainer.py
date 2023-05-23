@@ -1,9 +1,9 @@
-import wandb
 import torch
 from sklearn.neighbors import NearestNeighbors
 
 from dataset import *
 from network import *
+import utils
 
 class UnsupervisedTransferLearnTrainer:
     def __init__(self, model: torch.nn.Module, config):
@@ -206,11 +206,7 @@ class UnsupervisedTransferLearnTrainer:
             print(f'\t Validation loss: {val_loss:.5f}')
             print(f'\t Test loss: {test_loss}')
 
-            wandb.log({
-                "loss/train":train_loss,
-                "loss/val":val_loss,
-                "loss/test":test_loss,
-            })
+            utils.log_run(train_loss, val_loss, test_loss)
 
             # Save the model checkpoints
             #if e % self.save_checkpoint_every == 0 or e == (self.max_epochs - 1):  # if the current epoch is in the interval, or is the last epoch -> save

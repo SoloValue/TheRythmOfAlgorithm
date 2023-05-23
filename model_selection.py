@@ -2,15 +2,11 @@ import torchvision
 import torchvision.transforms as T
 import torch
 import yaml
-import wandb
 
 from dataset import *
 from utils import *
 from network import *
 from trainer import *
-
-wandb.login()
-#6be89a04516c30d593ca98e94d3477da24546f26
 
 seed_everything()
 
@@ -66,37 +62,27 @@ for model_type in list_model_type:
             config["train_dataset"]["batch_size"] = config["train_dataset"]["batch_size"]/2
         elif model_type == "ResNet101":
             encoder = ResNet101(config["model"])            
-            config["train_dataset"]["batch_size"] = config["train_dataset"]["batch_size"]/2
         elif model_type == "VGG16_BN":
-            encoder = VGG16_BN(config["model"])       
-            config["train_dataset"]["batch_size"] = config["train_dataset"]["batch_size"]/2      
+            encoder = VGG16_BN(config["model"])          
         elif model_type == "PerVGG16_BN":
             encoder = PersonalizedVGG16_BN(config["model"])
-            config["train_dataset"]["batch_size"] = config["train_dataset"]["batch_size"]/2
              
         encoder.cuda()
 
-        wandb.init(
-                # Set the project where this run will be logged
-                project=config["general"]["project_name"],
-                # We pass a run name (otherwise it’ll be randomly assigned, like sunshine-lollypop-10)
-                name=f"{loss_funct}_{model_type}", 
-                # Track hyperparameters and run metadata
-                config={
-                "learning_rate": config["training"]["learning_rate"],
-                "architecture": model_type,
-                "dataset": "UTKFace",
-                "dataset_size": len(full_dataset),
-                "epochs": config["training"]["max_epochs"],
-                "batch_size": config["train_dataset"]["batch_size"],
-                "device": "cuda",
-                "loss": config["training"]["loss_function"]
-                })
+        init_run(f"{loss_funct}_{model_type}", dict({
+            "learning_rate": config["training"]["learning_rate"],
+            "architecture": model_type,
+            "dataset": "UTKFace",
+            "dataset_size": len(full_dataset),
+            "epochs": config["training"]["max_epochs"],
+            "batch_size": config["train_dataset"]["batch_size"],
+            "device": "cuda",
+            "loss": config["training"]["loss_function"]
+        }))
 
         
         trainer = UnsupervisedTransferLearnTrainer(encoder, config["training"])
         trainer.SetupTrain()
         trainer.train(train_loader, val_loader, test_loader)
-        
 
-        wandb.finish()
+save_recap("runs_recap.json")
