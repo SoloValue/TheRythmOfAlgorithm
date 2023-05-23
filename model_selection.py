@@ -40,8 +40,8 @@ list_model_type = [
         "PerVGG16_BN",
 ]
 
-for loss_funct in list_loss_function:
-    for model_type in list_model_type:
+for model_type in list_model_type:
+    for loss_funct in list_loss_function:
 
         config["training"]["loss_function"] = loss_funct
 
@@ -54,6 +54,27 @@ for loss_funct in list_loss_function:
 
         full_dataset, train_loader, val_loader = get_train_dataset(config["train_dataset"], config["training"]["loss_function"], transform)
         _, test_loader = get_test_dataset(config["test_dataset"], transform)
+
+        if model_type == "CNNencoder": 
+            encoder = CNNencoder() 
+        elif model_type == "PerResNet18": 
+            encoder = PersonalizedResNet18(config["model"]) 
+        elif model_type == "ResNet18":
+            encoder = ResNet18(config["model"]) 
+        elif model_type == "PerResNet101": 
+            encoder = PersonalizedResNet101(config["model"])
+            config["train_dataset"]["batch_size"] = config["train_dataset"]["batch_size"]/2
+        elif model_type == "ResNet101":
+            encoder = ResNet101(config["model"])            
+            config["train_dataset"]["batch_size"] = config["train_dataset"]["batch_size"]/2
+        elif model_type == "VGG16_BN":
+            encoder = VGG16_BN(config["model"])       
+            config["train_dataset"]["batch_size"] = config["train_dataset"]["batch_size"]/2      
+        elif model_type == "PerVGG16_BN":
+            encoder = PersonalizedVGG16_BN(config["model"])
+            config["train_dataset"]["batch_size"] = config["train_dataset"]["batch_size"]/2
+             
+        encoder.cuda()
 
         wandb.init(
                 # Set the project where this run will be logged
@@ -72,24 +93,6 @@ for loss_funct in list_loss_function:
                 "loss": config["training"]["loss_function"]
                 })
 
-        #rsync -r -e 'ssh -p 61099' azure_dir/ disi@ml-lab-55bc589a-5fd7-4f52-b071-64c2815e9b95.westeurope.cloudapp.azure.com:/home/disi/ML_project
-
-        if model_type == "CNNencoder": 
-            encoder = CNNencoder() 
-        elif model_type == "PerResNet18": 
-            encoder = PersonalizedResNet18(config["model"]) 
-        elif model_type == "ResNet18":
-            encoder = ResNet18(config["model"]) 
-        elif model_type == "PerResNet101": 
-            encoder = PersonalizedResNet101(config["model"])
-        elif model_type == "ResNet101":
-            encoder = ResNet101(config["model"])            
-        elif model_type == "VGG16_BN":
-             encoder = VGG16_BN(config["model"])             
-        elif model_type == "PerVGG16_BN":
-             encoder = PersonalizedVGG16_BN(config["model"])
-             
-        encoder.cuda()
         
         trainer = UnsupervisedTransferLearnTrainer(encoder, config["training"])
         trainer.SetupTrain()
