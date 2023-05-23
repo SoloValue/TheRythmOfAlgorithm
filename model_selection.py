@@ -59,7 +59,7 @@ for model_type in list_model_type:
             encoder = ResNet18(config["model"]) 
         elif model_type == "PerResNet101": 
             encoder = PersonalizedResNet101(config["model"])
-            config["train_dataset"]["batch_size"] = config["train_dataset"]["batch_size"]/2
+            config["train_dataset"]["batch_size"] = config["train_dataset"]["batch_size"]/4
         elif model_type == "ResNet101":
             encoder = ResNet101(config["model"])            
         elif model_type == "VGG16_BN":
@@ -80,9 +80,11 @@ for model_type in list_model_type:
             "loss": config["training"]["loss_function"]
         }))
 
-        
+        print(f'Configuration: {loss_funct} - {model_type}')
         trainer = UnsupervisedTransferLearnTrainer(encoder, config["training"])
         trainer.SetupTrain()
         trainer.train(train_loader, val_loader, test_loader)
+        print("")
 
-save_recap("runs_recap.json")
+        save_recap("runs_recap.json")
+
