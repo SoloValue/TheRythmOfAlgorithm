@@ -59,13 +59,16 @@ for model_type in list_model_type:
             encoder = ResNet18(config["model"]) 
         elif model_type == "PerResNet101": 
             encoder = PersonalizedResNet101(config["model"])
-            config["train_dataset"]["batch_size"] = config["train_dataset"]["batch_size"]/4
+            config["train_dataset"]["batch_size"] = 16
         elif model_type == "ResNet101":
-            encoder = ResNet101(config["model"])            
+            encoder = ResNet101(config["model"])
+            config["train_dataset"]["batch_size"] = 16      
         elif model_type == "VGG16_BN":
-            encoder = VGG16_BN(config["model"])          
+            encoder = VGG16_BN(config["model"])
+            config["train_dataset"]["batch_size"] = 32   
         elif model_type == "PerVGG16_BN":
             encoder = PersonalizedVGG16_BN(config["model"])
+            config["train_dataset"]["batch_size"] = 32
              
         encoder.cuda()
 
