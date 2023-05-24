@@ -30,10 +30,10 @@ list_model_type = [
         "CNNencoder",
         "ResNet18",
         "PerResNet18",
-        #"ResNet101",
-        #"PerResNet101",
-        #"VGG16_BN",
-        #"PerVGG16_BN",
+        "ResNet50",
+        "PerResNet50",
+        "VGG11_BN",
+        "PerVGG11_BN",
 ]
 
 for model_type in list_model_type:
@@ -57,18 +57,14 @@ for model_type in list_model_type:
             encoder = PersonalizedResNet18(config["model"]) 
         elif model_type == "ResNet18":
             encoder = ResNet18(config["model"]) 
-        elif model_type == "PerResNet101": 
-            encoder = PersonalizedResNet101(config["model"])
-            config["train_dataset"]["batch_size"] = 4
-        elif model_type == "ResNet101":
-            encoder = ResNet101(config["model"])
-            config["train_dataset"]["batch_size"] = 4
-        elif model_type == "VGG16_BN":
-            encoder = VGG16_BN(config["model"])
-            config["train_dataset"]["batch_size"] = 4
-        elif model_type == "PerVGG16_BN":
-            encoder = PersonalizedVGG16_BN(config["model"])
-            config["train_dataset"]["batch_size"] = 4
+        elif model_type == "PerResNet50": 
+            encoder = PersonalizedResNet50(config["model"])
+        elif model_type == "ResNet50":
+            encoder = ResNet50(config["model"])
+        elif model_type == "VGG11_BN":
+            encoder = VGG11_BN(config["model"])
+        elif model_type == "PerVGG11_BN":
+            encoder = PersonalizedVGG11_BN(config["model"])
 
         encoder.cuda()
 

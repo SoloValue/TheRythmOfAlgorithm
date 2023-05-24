@@ -101,12 +101,12 @@ class PersonalizedResNet18(torch.nn.Module):
     def inference(self, x):
         return self.net(x)
 
-class ResNet101(torch.nn.Module):
+class ResNet50(torch.nn.Module):
     def __init__(self, config):
-        super(ResNet101, self).__init__()
+        super(ResNet50, self).__init__()
         # Load a resnet18 from torchvision, either use pretrained weights or not
         weights = "IMAGENET1K_V1" if config["pretrained"] else None
-        self.net = torchvision.models.resnet101(weights=weights)
+        self.net = torchvision.models.resnet50(weights=weights)
         
     def forward(self, x):
         logits = self.net(x)
@@ -118,12 +118,12 @@ class ResNet101(torch.nn.Module):
         return self.net(x)
 
 
-class PersonalizedResNet101(torch.nn.Module):
+class PersonalizedResNet50(torch.nn.Module):
     def __init__(self, config):
-        super(PersonalizedResNet101, self).__init__()
+        super(PersonalizedResNet50, self).__init__()
         # Load a resnet18 from torchvision, either use pretrained weights or not
         weights = "IMAGENET1K_V1" if config["pretrained"] else None
-        self.net = torchvision.models.resnet101(weights=weights)
+        self.net = torchvision.models.resnet50(weights=weights)
         # remove the last FC layer
         num_output_feats = self.net.fc.in_features   # dim  of the features
         self.net.fc = torch.nn.Linear(num_output_feats, config["num_classes"])  # Initialize a new fully connected layer, with num_output = num_classes
@@ -137,12 +137,12 @@ class PersonalizedResNet101(torch.nn.Module):
     def inference(self, x):
         return self.net(x)
 
-class VGG16_BN(torch.nn.Module):
+class VGG11_BN(torch.nn.Module):
     def __init__(self, config):
-        super(VGG16_BN, self).__init__()
+        super(VGG11_BN, self).__init__()
         # Load a resnet18 from torchvision, either use pretrained weights or not
         weights = "IMAGENET1K_V1" if config["pretrained"] else None
-        self.net = torchvision.models.vgg16_bn(weights=weights)
+        self.net = torchvision.models.vgg11_bn(weights=weights)
         
     def forward(self, x):
         logits = self.net(x)
@@ -153,12 +153,12 @@ class VGG16_BN(torch.nn.Module):
     def inference(self, x):
         return self.net(x)
 
-class PersonalizedVGG16_BN(torch.nn.Module):
+class PersonalizedVGG11_BN(torch.nn.Module):
     def __init__(self, config):
-        super(PersonalizedVGG16_BN, self).__init__()
+        super(PersonalizedVGG11_BN, self).__init__()
         # Load a resnet18 from torchvision, either use pretrained weights or not
         weights = "IMAGENET1K_V1" if config["pretrained"] else None
-        self.net = torchvision.models.vgg16_bn(weights=weights)
+        self.net = torchvision.models.vgg11_bn(weights=weights)
         # remove the last FC layer
         num_output_feats = self.net.fc.in_features   # dim  of the features
         self.net.fc = torch.nn.Linear(num_output_feats, config["num_classes"])  # Initialize a new fully connected layer, with num_output = num_classes
