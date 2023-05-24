@@ -20,7 +20,7 @@ transform = T.Compose([
     T.ToTensor(),
     T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]), #normalization for the ResNet18
     ])
-      
+
 list_loss_function = [
         "triplet",
         "MSE"
@@ -30,10 +30,10 @@ list_model_type = [
         "CNNencoder",
         "ResNet18",
         "PerResNet18",
-        "ResNet101",
-        "PerResNet101",
-        "VGG16_BN",
-        "PerVGG16_BN",
+        #"ResNet101",
+        #"PerResNet101",
+        #"VGG16_BN",
+        #"PerVGG16_BN",
 ]
 
 for model_type in list_model_type:
@@ -59,17 +59,17 @@ for model_type in list_model_type:
             encoder = ResNet18(config["model"]) 
         elif model_type == "PerResNet101": 
             encoder = PersonalizedResNet101(config["model"])
-            config["train_dataset"]["batch_size"] = 16
+            config["train_dataset"]["batch_size"] = 4
         elif model_type == "ResNet101":
             encoder = ResNet101(config["model"])
-            config["train_dataset"]["batch_size"] = 16      
+            config["train_dataset"]["batch_size"] = 4
         elif model_type == "VGG16_BN":
             encoder = VGG16_BN(config["model"])
-            config["train_dataset"]["batch_size"] = 32   
+            config["train_dataset"]["batch_size"] = 4
         elif model_type == "PerVGG16_BN":
             encoder = PersonalizedVGG16_BN(config["model"])
-            config["train_dataset"]["batch_size"] = 32
-             
+            config["train_dataset"]["batch_size"] = 4
+
         encoder.cuda()
 
         init_run(f"{loss_funct}_{model_type}", dict({
