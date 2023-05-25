@@ -32,6 +32,8 @@ for model in model_and_architecture:
     ax1.plot([i for i in range(len(test_l))], test_l, label = model)
     ax2.plot([i for i in range(len(train_l))], train_l, label = model)
     ax3.plot([i for i in range(len(val_l))], val_l, label = model)
+plt.xlabel('Epochs')
+plt.ylabel('Error')
 plt.legend(title = 'Models', loc='upper right', bbox_to_anchor=(0.6, 3, 0.5, 0.5))
 plt.show()
 
