@@ -1,9 +1,0 @@
-
-	Start training...
-======= Epoch: 0
-	 Training loss: 0.06931
-	 Validation loss: 0.98095
-	 Test loss: 1.2
-	...saving best model...
------------------------------------------------------
-	...end of training
