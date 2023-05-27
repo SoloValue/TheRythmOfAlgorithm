@@ -167,3 +167,13 @@ def get_test_dataset(config, transform):
     test_loader = TestLoader(test_dataset, batch_size = config["batch_size"], shuffle=False)
 
     return test_dataset, test_loader
+
+#### SARA####
+def get_comp_dataset(config, transform):
+    query_dataset = TestDataset(config["query_root"], transform)
+    query_loader = TestLoader(query_dataset, batch_size = config["batch_size"], shuffle=False)
+
+    gallery_dataset = TestDataset(config["gallery_root"], transform)
+    gallery_loader = TestLoader(gallery_dataset, batch_size = config["batch_size"], shuffle=False)
+
+    return query_dataset, query_loader, gallery_dataset, gallery_loader
