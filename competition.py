@@ -5,13 +5,8 @@
 # from query import *
 
 import json
-""" query and gallery retrieval """
-#data_path = config['competition_code']['data_root']
 
-""" here we want to select the model to submit """
-
-
-...
+""" select best models to use for the submit """
 
 ###to do
 # with open("runs_recap.json", "r") as read_file:
@@ -60,3 +55,58 @@ print(best_models[top_four[0]]["minimum_error"])
 print(best_models[top_four[1]]["minimum_error"])
 print(best_models[top_four[2]]["minimum_error"])
 print(best_models[top_four[3]]["minimum_error"])
+
+###### SARA ######
+""" feed query and gallery to model -> get results -> submit"""
+# query and gallery retrieval
+DATA_PATH = config['competition_code']['data_root']
+QUERY_PATH = config['competition_code']['query_root']
+GALLERY_PATH = config['competition_code']['gallery_root']
+# set up
+IMG_SIZE = (config["general"]["img_size"],config["general"]["img_size"])
+BATCH_SIZE = config["competition_code"]["batch_size"]
+DEVICE = torch.device("cuda")
+TRANSFORM = T.Compose([
+        T.Resize(IMG_SIZE),
+        T.ToTensor(),
+        T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]), #normalization for the ResNet18
+    ])
+
+""" give as input to model """ 
+
+if __name__ == "__main__":
+    ## SELECT MODEL
+    model_to_tun = "...TO INSERT ON COMP DAY..."             # INSERT ON COMP DAY !!!!!
+
+    if model_to_run == "CNNencoder": 
+        encoder = CNNencoder() 
+    elif model_to_run == "PerResNet18": 
+        encoder = PersonalizedResNet18(config["model"]) 
+    elif model_to_run == "ResNet18":
+        encoder = ResNet18(config["model"]) 
+    elif model_to_run == "PerResNet50": 
+        encoder = PersonalizedResNet50(config["model"])
+    elif model_to_run == "ResNet50":
+        encoder = ResNet50(config["model"])
+    elif model_to_run == "VGG11_BN":
+        encoder = VGG11_BN(config["model"])
+    elif model_to_run == "PerVGG11_BN":
+        encoder = PersonalizedVGG11_BN(config["model"])
+
+    ## PREPARE
+    test_dataset, test_loader = get_test_dataset(config['competition_code'], TRANSFORM)
+
+    #rsync -r -e 'ssh -p 61099' azure_dir/ disi@ml-lab-55bc589a-5fd7-4f52-b071-64c2815e9b95.westeurope.cloudapp.azure.com:/home/disi/ML_project
+
+    encoder.cuda()
+    encoder.load_state_dict(torch.load(f'{config["training"]["model_path"]}best.pth', map_location=DEVICE))
+
+    ## FEED QUERY AND GALLERY TO MODEL
+    # SARA: secondo me dobbiamo aggiustare un po' il test_step per la comp (query e gallery separate) OPPURE creare un comp_test 
+    trainer = UnsupervisedTransferLearnTrainer(encoder, config["training"])
+
+    distance_list, indices_list, error = trainer.test_step(test_loader)
+    print(indices_list[0])
+    print(error)
+
+    ## 'PACK UP' RESULTS AND SUBMIT THEM
