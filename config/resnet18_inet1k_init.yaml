@@ -25,6 +25,6 @@ test_dataset:
 
 competition_code:
   data_root: './comp_data/'
-  query_root: './comp_data/...QUERY_NAME....'        # to complete
-  gallery_root: './comp_data/...GALLERY_NAME....'    # to complete
+  query_root: './comp_data/query/'        # to complete
+  gallery_root: './comp_data/gallery/'    # to complete
   batch_size: 1

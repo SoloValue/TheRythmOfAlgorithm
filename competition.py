@@ -1,8 +1,9 @@
-# from dataset import *
-# from utils import *
-# from network import *
-# from model_selection import *
-# from query import *
+from dataset import *
+from utils import *
+from network import *
+from model_selection import *
+from query import *
+from trainer import *
 
 import json
 
@@ -27,37 +28,40 @@ import json
 ##MARTA##
 #sistemare per far sì che best model sia un dizionario di dizionari con i 4 modelli con i test error migliori (quindi modificare il min)
 
-# SARA - TOP 4 MODELS
-with open("runs_recap.json", "r") as read_file:
-    data = json.load(read_file)
+# SARA (rielaborato codice di marta sopra) - TOP 4 MODELS
+def find_best_models():
 
-best_models = {}   # dictionary containing models
+    with open("runs_recap.json", "r") as read_file:
+        data = json.load(read_file)
 
-for model in data:
-    min_error = min(data[model]['test_loss'])
-    best_models[model] = {str(model): data[model],
-                        "minimum_error": min_error}
+    best_models = {}   # dictionary containing model info & minimum_error for each model
+    for model in data:
+        min_error = min(data[model]['test_loss'])
+        best_models[model] = {str(model): data[model],
+                            "minimum_error": min_error}
 
-print(best_models)
+    print(best_models)
 
-## now to find the best 4
-global_min_loss = float('inf')
-top_four = []
-for model in best_models:
-    if best_models[model]["minimum_error"] < global_min_loss:     # best model so far
-        global_min_loss = best_models[model]['minimum_error']     # update the global min loss
-        top_four.insert(0, model)                    # add new best (model name) in top position
+    ## now to find the best 4
+    global_min_loss = float('inf')
+    top_four = []
+    for model in best_models:
+        if best_models[model]["minimum_error"] < global_min_loss:     # best model so far
+            global_min_loss = best_models[model]['minimum_error']     # update the global min loss
+            top_four.insert(0, model)                    # add new best (model name) in top position
 
-#print("Minimum loss:", minimum_loss)
-#print("Best model:", best_model)
-print(top_four[:4])
-print(best_models[top_four[0]]["minimum_error"])
-print(best_models[top_four[1]]["minimum_error"])
-print(best_models[top_four[2]]["minimum_error"])
-print(best_models[top_four[3]]["minimum_error"])
+    #print("Minimum loss:", minimum_loss)
+    #print("Best model:", best_model)
+    #print(top_four[:4])
+    print(best_models[top_four[0]]["minimum_error"])
+    print(best_models[top_four[1]]["minimum_error"])
+    print(best_models[top_four[2]]["minimum_error"])            
+    print(best_models[top_four[3]]["minimum_error"])
+return top_four[:4]
 
 ###### SARA ######
-""" feed query and gallery to model -> get results -> submit"""
+""" This section is for: feed query and gallery to model -> get results -> submit """
+
 # query and gallery retrieval
 DATA_PATH = config['competition_code']['data_root']
 QUERY_PATH = config['competition_code']['query_root']
@@ -76,8 +80,8 @@ TRANSFORM = T.Compose([
 
 if __name__ == "__main__":
     ## SELECT MODEL
-    model_to_tun = "...TO INSERT ON COMP DAY..."             # INSERT ON COMP DAY !!!!!
-    top_n = # INSERT ON COMP DAY (number of k neighbours for knn)
+    model_to_tun = "ResNet18"             # INSERT ON COMP DAY !!!!!
+    top_n = 10    # INSERT ON COMP DAY (number of k neighbours for knn)
 
     if model_to_run == "CNNencoder": 
         encoder = CNNencoder() 
@@ -103,10 +107,15 @@ if __name__ == "__main__":
     encoder.load_state_dict(torch.load(f'{config["training"]["model_path"]}best.pth', map_location=DEVICE))
 
     ## FEED QUERY AND GALLERY TO MODEL
-    # SARA: secondo me dobbiamo aggiustare un po' il test_step per la comp (query e gallery separate) OPPURE creare un comp_test 
+    # SARA: ho creato comp_step nel trainer.py, uguale al test_step ma lavora con query e gallery in due directory separate
     trainer = UnsupervisedTransferLearnTrainer(encoder, config["training"])  # SARA: CAMBIARE CONFIG?
 
-    distance_list, indices_list = trainer.comp_step(query_loader, gallery_loader, top_n)
+    results = trainer.comp_step(query_loader, gallery_loader, top_n)
     print(indices_list[0])
 
     ## 'PACK UP' RESULTS AND SUBMIT THEM
+    final_results = dict()
+    final_results["groupname"] = "The Rythm of Algorithm - ADD MODEL NAME"   # ADD MODEL NAME SO WE KNOW WHICH ONE IT IS IN THE CLASSIFICA
+    # TO FINISH ON COMPETITION DAY DEPENDING ON WHAT FORM THEY WANT FOR THE RANKING
+    final_results["ranking"] = results
+    ## SUBMIT final_results

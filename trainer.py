@@ -231,12 +231,17 @@ class UnsupervisedTransferLearnTrainer:
 
             knn = NearestNeighbors(n_neighbors=top_n, metric="cosine")
             knn.fit(embedding)
-            #### SARA: CAPIRE COME GESTIRE UNA QUERY PER VOLTA! ####
-            distance_list, indices_list = knn.kneighbors(target_embedding, return_distance=True)
-            indices_list = indices_list.tolist()
-            index_list = indices_list[0]
+            #### SARA: CAPIRE COME GESTIRE UNA QUERY PER VOLTA! Per ora fatto così ####
+            for q,query_name in enumerate(query_names):
+                results = dict()
+                distance_list, indices_list = knn.kneighbors(target_embedding[q], return_distance=True)
+                indices_list = indices_list.tolist()
+                index_list = indices_list[0]
 
-        return distance_list, indices_list
+                results[query_name]['index_list'] = index_list
+                results[query_name]['distance_list'] = distance_list
+
+        return results
 
     def train(self, train_loader, val_loader, test_loader):
 

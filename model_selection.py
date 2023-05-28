@@ -2,6 +2,7 @@ import torchvision
 import torchvision.transforms as T
 import torch
 import yaml
+import json
 
 from dataset import *
 from utils import *
@@ -87,3 +88,60 @@ for model_type in list_model_type:
 
         save_recap("runs_recap.json")
 
+
+
+""" select best models to use for the submit """
+
+###to do
+# with open("runs_recap.json", "r") as read_file:
+#     data = json.load(read_file)
+
+# minimum_loss = float('inf')
+# best_model = {}
+
+# for model in data:
+#     error = min(data[model]['test_loss'])
+#     if error < minimum_loss:
+#         minimum_loss = error
+#         best_model = {model: data[model]}
+
+# print("Minimum loss:", minimum_loss)
+# print("Best model:", best_model)
+
+##MARTA##
+#sistemare per far sì che best model sia un dizionario di dizionari con i 4 modelli con i test error migliori (quindi modificare il min)
+
+# SARA (rielaborato codice di marta sopra in una funzione) - TOP 4 MODELS
+def find_best_models():
+
+    with open("runs_recap.json", "r") as read_file:
+        data = json.load(read_file)
+
+    best_models = {}   # dictionary containing model info & minimum_error for each model
+    for model in data:
+        min_error = min(data[model]['test_loss'])
+        best_models[model] = {str(model): data[model],
+                            "minimum_error": min_error}
+
+    print(best_models)
+
+    ## now to find the best 4
+    global_min_loss = float('inf')
+    top_four = []
+    for model in best_models:
+        if best_models[model]["minimum_error"] < global_min_loss:     # best model so far
+            global_min_loss = best_models[model]['minimum_error']     # update the global min loss
+            top_four.insert(0, model)                    # add new best (model name) in top position
+
+    #print("Minimum loss:", minimum_loss)
+    #print("Best model:", best_model)
+    #print(top_four[:4])
+    print(best_models[top_four[0]]["minimum_error"])
+    print(best_models[top_four[1]]["minimum_error"])
+    print(best_models[top_four[2]]["minimum_error"])            
+    print(best_models[top_four[3]]["minimum_error"])
+
+    return top_four[:4]
+
+top_four = find_best_models()
+print(top_four)
