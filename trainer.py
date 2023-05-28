@@ -191,6 +191,53 @@ class UnsupervisedTransferLearnTrainer:
 
         return distance_list, indices_list, tot_test_error/len(target_letters)
 
+    def comp_step(self, query_loader: TestLoader, gallery_loader: TestLoader, top_n: int):
+        """ takes query, gallery and number of top-k to rank. Returns:
+        distance_list : list of distance of i-th gallery-image from query;
+        indices_list : list of image indexes corresponding in distances_list"""
+
+        self.model.eval()
+
+        query_names = query_loader.img_names
+        gallery_names = gallery_loader.img_names
+
+        embedding = None
+        target_embedding = None
+
+        with torch.no_grad():
+            # create embedding (gallery)
+            for i,image in enumerate(gallery_loader):
+                image = image.cuda()
+                image_enc = self.model(image).cpu()
+
+                if i==0: 
+                    embedding = image_enc
+                else:
+                    embedding = torch.cat((embedding, image_enc), 0)
+            
+            # create embedding (query)
+            for i,image in enumerate(query_loader):
+                image = image.cuda()
+                image_enc = self.model(image).cpu()
+
+                if i==0: 
+                    target_embedding = image_enc
+                else:
+                    target_embedding = torch.cat((target_embedding, image_enc), 0)
+
+            # ranking
+            embedding = embedding.cpu().detach().numpy()
+            target_embedding = target_embedding.cpu().detach().numpy()
+
+            knn = NearestNeighbors(n_neighbors=top_n, metric="cosine")
+            knn.fit(embedding)
+            #### SARA: CAPIRE COME GESTIRE UNA QUERY PER VOLTA! ####
+            distance_list, indices_list = knn.kneighbors(target_embedding, return_distance=True)
+            indices_list = indices_list.tolist()
+            index_list = indices_list[0]
+
+        return distance_list, indices_list
+
     def train(self, train_loader, val_loader, test_loader):
 
         # For each epoch, train the network and then compute evaluation results

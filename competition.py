@@ -77,6 +77,7 @@ TRANSFORM = T.Compose([
 if __name__ == "__main__":
     ## SELECT MODEL
     model_to_tun = "...TO INSERT ON COMP DAY..."             # INSERT ON COMP DAY !!!!!
+    top_n = # INSERT ON COMP DAY (number of k neighbours for knn)
 
     if model_to_run == "CNNencoder": 
         encoder = CNNencoder() 
@@ -94,7 +95,7 @@ if __name__ == "__main__":
         encoder = PersonalizedVGG11_BN(config["model"])
 
     ## PREPARE
-    test_dataset, test_loader = get_test_dataset(config['competition_code'], TRANSFORM)
+    query_dataset, query_loader, gallery_dataset, gallery_loader = get_comp_dataset(config['competition_code'], TRANSFORM)
 
     #rsync -r -e 'ssh -p 61099' azure_dir/ disi@ml-lab-55bc589a-5fd7-4f52-b071-64c2815e9b95.westeurope.cloudapp.azure.com:/home/disi/ML_project
 
@@ -103,10 +104,9 @@ if __name__ == "__main__":
 
     ## FEED QUERY AND GALLERY TO MODEL
     # SARA: secondo me dobbiamo aggiustare un po' il test_step per la comp (query e gallery separate) OPPURE creare un comp_test 
-    trainer = UnsupervisedTransferLearnTrainer(encoder, config["training"])
+    trainer = UnsupervisedTransferLearnTrainer(encoder, config["training"])  # SARA: CAMBIARE CONFIG?
 
-    distance_list, indices_list, error = trainer.test_step(test_loader)
+    distance_list, indices_list = trainer.comp_step(query_loader, gallery_loader, top_n)
     print(indices_list[0])
-    print(error)
 
     ## 'PACK UP' RESULTS AND SUBMIT THEM
