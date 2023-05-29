@@ -1,12 +1,20 @@
-from dataset import *
+import yaml
+import torch
+import torchvision
+import torchvision.transforms as T
+
+from dataset import TestDataset, TestLoader, get_comp_dataset
 from utils import *
 from network import *
-from model_selection import *
-from query import *
-from trainer import *
+from trainer import UnsupervisedTransferLearnTrainer
 
 ###### SARA ######
 """ This file is for: choose model -> feed query and gallery to model -> get results -> submit """
+
+config_path = "./config/resnet18_inet1k_init.yaml"
+with open(config_path, "r") as f:
+    config = yaml.safe_load(f)
+    print(f"\tConfiguration file for competition loaded from: {config_path}")
 
 # query and gallery retrieval
 DATA_PATH = config['competition_code']['data_root']
@@ -24,45 +32,42 @@ TRANSFORM = T.Compose([
 
 """ give as input to model """ 
 
-if __name__ == "__main__":
-    ## SELECT MODEL
-    model_to_run = "ResNet18"             # INSERT ON COMP DAY !!!!!
-    top_n = 10    # INSERT ON COMP DAY (number of k neighbours for knn)
+## SELECT MODEL
+model_to_run = "PerResNet18"             # INSERT ON COMP DAY !!!!!
+top_n = 10    # INSERT ON COMP DAY (number of k neighbours for knn)
 
-    if model_to_run == "CNNencoder": 
-        encoder = CNNencoder() 
-    elif model_to_run == "PerResNet18": 
-        encoder = PersonalizedResNet18(config["model"]) 
-    elif model_to_run == "ResNet18":
-        encoder = ResNet18(config["model"]) 
-    elif model_to_run == "PerResNet50": 
-        encoder = PersonalizedResNet50(config["model"])
-    elif model_to_run == "ResNet50":
-        encoder = ResNet50(config["model"])
-    elif model_to_run == "VGG11_BN":
-        encoder = VGG11_BN(config["model"])
-    elif model_to_run == "PerVGG11_BN":
-        encoder = PersonalizedVGG11_BN(config["model"])
+if model_to_run == "CNNencoder": 
+    encoder = CNNencoder() 
+elif model_to_run == "PerResNet18": 
+    encoder = PersonalizedResNet18(config["model"]) 
+elif model_to_run == "ResNet18":
+    encoder = ResNet18(config["model"]) 
+elif model_to_run == "PerResNet50": 
+    encoder = PersonalizedResNet50(config["model"])
+elif model_to_run == "ResNet50":
+    encoder = ResNet50(config["model"])
+elif model_to_run == "VGG11_BN":
+    encoder = VGG11_BN(config["model"])
+elif model_to_run == "PerVGG11_BN":
+    encoder = PersonalizedVGG11_BN(config["model"])
 
-    ## PREPARE
-    query_dataset, query_loader, gallery_dataset, gallery_loader = get_comp_dataset(config['competition_code'], TRANSFORM)
+## PREPARE
+query_dataset, query_loader, gallery_dataset, gallery_loader = get_comp_dataset(config['competition_code'], TRANSFORM)
 
-    #rsync -r -e 'ssh -p 61099' azure_dir/ disi@ml-lab-55bc589a-5fd7-4f52-b071-64c2815e9b95.westeurope.cloudapp.azure.com:/home/disi/ML_project
+encoder.cuda()
+encoder.load_state_dict(torch.load(f'{config["training"]["model_path"]}best.pth', map_location=DEVICE))
+print("\tModel loaded")
+## FEED QUERY AND GALLERY TO MODEL
+# SARA: ho creato comp_step nel trainer.py, uguale al test_step ma lavora con query e gallery in due directory separate
+trainer = UnsupervisedTransferLearnTrainer(encoder, config["training"])  # SARA: CAMBIARE CONFIG?
 
-    encoder.cuda()
-    encoder.load_state_dict(torch.load(f'{config["training"]["model_path"]}best.pth', map_location=DEVICE))
+results = trainer.comp_step(query_loader, gallery_loader, top_n)
 
-    ## FEED QUERY AND GALLERY TO MODEL
-    # SARA: ho creato comp_step nel trainer.py, uguale al test_step ma lavora con query e gallery in due directory separate
-    trainer = UnsupervisedTransferLearnTrainer(encoder, config["training"])  # SARA: CAMBIARE CONFIG?
+## 'PACK UP' RESULTS AND SUBMIT THEM
+final_results = dict()
+final_results["groupname"] = "The Rythm of Algorithm - ADD MODEL NAME"   # ADD MODEL NAME SO WE KNOW WHICH ONE IT IS IN THE CLASSIFICA
+# TO FINISH ON COMPETITION DAY DEPENDING ON WHAT FORM THEY WANT FOR THE RANKING
+final_results["ranking"] = results
+print(final_results)
 
-    results = trainer.comp_step(query_loader, gallery_loader, top_n)
-
-    ## 'PACK UP' RESULTS AND SUBMIT THEM
-    final_results = dict()
-    final_results["groupname"] = "The Rythm of Algorithm - ADD MODEL NAME"   # ADD MODEL NAME SO WE KNOW WHICH ONE IT IS IN THE CLASSIFICA
-    # TO FINISH ON COMPETITION DAY DEPENDING ON WHAT FORM THEY WANT FOR THE RANKING
-    final_results["ranking"] = results
-    print(final_results)
-    
-    ## SUBMIT final_results
+## SUBMIT final_results
