@@ -26,7 +26,7 @@ TRANSFORM = T.Compose([
 
 if __name__ == "__main__":
     ## SELECT MODEL
-    model_to_tun = "ResNet18"             # INSERT ON COMP DAY !!!!!
+    model_to_run = "ResNet18"             # INSERT ON COMP DAY !!!!!
     top_n = 10    # INSERT ON COMP DAY (number of k neighbours for knn)
 
     if model_to_run == "CNNencoder": 
