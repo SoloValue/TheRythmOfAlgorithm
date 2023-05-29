@@ -11,6 +11,11 @@ from trainer import UnsupervisedTransferLearnTrainer
 ###### SARA ######
 """ This file is for: choose model -> feed query and gallery to model -> get results -> submit """
 
+##PARAMETERS
+MODEL_PATH = './saved_models/MSE_ResNet18/best.pth'
+model_to_run = "PerResNet18"             # INSERT ON COMP DAY !!!!!
+top_n = 10    # INSERT ON COMP DAY (number of k neighbours for knn)
+
 config_path = "./config/resnet18_inet1k_init.yaml"
 with open(config_path, "r") as f:
     config = yaml.safe_load(f)
@@ -33,8 +38,7 @@ TRANSFORM = T.Compose([
 """ give as input to model """ 
 
 ## SELECT MODEL
-model_to_run = "PerResNet18"             # INSERT ON COMP DAY !!!!!
-top_n = 10    # INSERT ON COMP DAY (number of k neighbours for knn)
+
 
 if model_to_run == "CNNencoder": 
     encoder = CNNencoder() 
@@ -55,7 +59,7 @@ elif model_to_run == "PerVGG11_BN":
 query_dataset, query_loader, gallery_dataset, gallery_loader = get_comp_dataset(config['competition_code'], TRANSFORM)
 
 encoder.cuda()
-encoder.load_state_dict(torch.load(f'{config["training"]["model_path"]}best.pth', map_location=DEVICE))
+encoder.load_state_dict(torch.load(MODEL_PATH, map_location=DEVICE))
 print("\tModel loaded")
 ## FEED QUERY AND GALLERY TO MODEL
 # SARA: ho creato comp_step nel trainer.py, uguale al test_step ma lavora con query e gallery in due directory separate
