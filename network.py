@@ -160,9 +160,9 @@ class PersonalizedVGG11_BN(torch.nn.Module):
         weights = "IMAGENET1K_V1" if config["pretrained"] else None
         self.net = torchvision.models.vgg11_bn(weights=weights)
         # remove the last FC layer
-        num_output_feats = self.net.fc.in_features   # dim  of the features
-        self.net.fc = torch.nn.Linear(num_output_feats, config["num_classes"])  # Initialize a new fully connected layer, with num_output = num_classes
-
+        num_output_feats = self.net.classifier._modules['6'].in_features
+        self.net.classifier._modules['6'] = torch.nn.Linear(num_output_feats, config["num_classes"])
+        
     def forward(self, x):
         logits = self.net(x)
         return logits
@@ -195,8 +195,8 @@ class PersonalizedVGG13_BN(torch.nn.Module):
         weights = "IMAGENET1K_V1" if config["pretrained"] else None
         self.net = torchvision.models.vgg13_bn(weights=weights)
         # remove the last FC layer
-        num_output_feats = self.net.fc.in_features   # dim  of the features
-        self.net.fc = torch.nn.Linear(num_output_feats, config["num_classes"])  # Initialize a new fully connected layer, with num_output = num_classes
+        num_output_feats = self.net.classifier._modules['6'].in_features
+        self.net.classifier._modules['6'] = torch.nn.Linear(num_output_feats, config["num_classes"])
 
     def forward(self, x):
         logits = self.net(x)
