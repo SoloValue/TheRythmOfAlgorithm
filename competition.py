@@ -14,7 +14,7 @@ from trainer import UnsupervisedTransferLearnTrainer
 ##PARAMETERS
 MODEL_PATH = './saved_models/MSE_ResNet18/best.pth'
 model_to_run = "PerResNet18"             # INSERT ON COMP DAY !!!!!
-top_n = 10    # INSERT ON COMP DAY (number of k neighbours for knn)
+top_n = 10        # INSERT ON COMP DAY (number of k neighbours for knn)
 
 config_path = "./config/resnet18_inet1k_init.yaml"
 with open(config_path, "r") as f:
@@ -69,7 +69,7 @@ results = trainer.comp_step(query_loader, gallery_loader, top_n)
 
 ## 'PACK UP' RESULTS AND SUBMIT THEM
 final_results = dict()
-final_results["groupname"] = "The Rythm of Algorithm - ADD MODEL NAME"   # ADD MODEL NAME SO WE KNOW WHICH ONE IT IS IN THE CLASSIFICA
+final_results["groupname"] = f"The Rythm of Algorithm - {model_to_run}"   # ADD MODEL NAME SO WE KNOW WHICH ONE IT IS IN THE CLASSIFICA
 # TO FINISH ON COMPETITION DAY DEPENDING ON WHAT FORM THEY WANT FOR THE RANKING
 final_results["ranking"] = results
 print(final_results)
