@@ -13,9 +13,9 @@ from trainer import UnsupervisedTransferLearnTrainer
 """ This file is for: choose model -> feed query and gallery to model -> get results -> submit """
 
 ##PARAMETERS
-MODEL_PATH = './saved_models/best.pth'
-model_to_run = "PerResNet18"             # INSERT ON COMP DAY !!!!!
-top_n = 10        # INSERT ON COMP DAY (number of k neighbours for knn)
+MODEL_PATH = './saved_models/triplet_PerVGG13_BN/best.pth'
+model_to_run = "PerVGG13_BN"   # INSERT ON COMP DAY !!!!!
+top_n = 10                     # INSERT ON COMP DAY (number of k neighbours for knn)
 
 config_path = "./config/resnet18_inet1k_init.yaml"
 with open(config_path, "r") as f:
@@ -55,6 +55,10 @@ elif model_to_run == "VGG11_BN":
     encoder = VGG11_BN(config["model"])
 elif model_to_run == "PerVGG11_BN":
     encoder = PersonalizedVGG11_BN(config["model"])
+elif model_type == "VGG13_BN":
+    encoder = VGG13_BN(config["model"])
+elif model_type == "PerVGG13_BN":
+    encoder = PersonalizedVGG13_BN(config["model"])
 
 ## PREPARE
 query_dataset, query_loader, gallery_dataset, gallery_loader = get_comp_dataset(config['competition_code'], TRANSFORM)
@@ -89,5 +93,11 @@ def submit(results, url="https://competition-production.up.railway.app/results/"
     except json.JSONDecodeError: 
         print(f"ERROR: {response.text}") 
         return None
-    
-submit(mydata)
+
+result = submit(mydata)
+
+if result: 
+    mydata["results"] = result
+
+    with open(f"comp_results/{model_to_run}.json", 'w') as fp:
+        json.dump(mydata, fp)
