@@ -2,6 +2,7 @@ import yaml
 import torch
 import torchvision
 import torchvision.transforms as T
+import requests
 
 from dataset import TestDataset, TestLoader, get_comp_dataset
 from utils import *
@@ -12,7 +13,7 @@ from trainer import UnsupervisedTransferLearnTrainer
 """ This file is for: choose model -> feed query and gallery to model -> get results -> submit """
 
 ##PARAMETERS
-MODEL_PATH = './saved_models/MSE_ResNet18/best.pth'
+MODEL_PATH = './saved_models/best.pth'
 model_to_run = "PerResNet18"             # INSERT ON COMP DAY !!!!!
 top_n = 10        # INSERT ON COMP DAY (number of k neighbours for knn)
 
@@ -68,10 +69,25 @@ trainer = UnsupervisedTransferLearnTrainer(encoder, config["training"])  # SARA:
 results = trainer.comp_step(query_loader, gallery_loader, top_n)
 
 ## 'PACK UP' RESULTS AND SUBMIT THEM
-final_results = dict()
-final_results["groupname"] = f"The Rythm of Algorithm - {model_to_run}"   # ADD MODEL NAME SO WE KNOW WHICH ONE IT IS IN THE CLASSIFICA
+mydata = dict()
+mydata["groupname"] = f"The Rythm of Algorithm"   # ADD MODEL NAME SO WE KNOW WHICH ONE IT IS IN THE CLASSIFICA
 # TO FINISH ON COMPETITION DAY DEPENDING ON WHAT FORM THEY WANT FOR THE RANKING
-final_results["ranking"] = results
-print(final_results)
+res = dict()
+res = results
+
+mydata["images"] = res
+print(mydata)
 
 ## SUBMIT final_results
+def submit(results, url="https://competition-production.up.railway.app/results/"): 
+    res = json.dumps(results) 
+    response = requests.post(url, res) 
+    try: 
+        result = json.loads(response.text) 
+        print(f"accuracy is {result['results']}") 
+        return result 
+    except json.JSONDecodeError: 
+        print(f"ERROR: {response.text}") 
+        return None
+    
+submit(mydata)

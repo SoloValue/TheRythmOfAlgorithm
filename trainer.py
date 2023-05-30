@@ -241,8 +241,7 @@ class UnsupervisedTransferLearnTrainer:
                 distance_list = distance_list.tolist()
                 index_list = indices_list[0]
 
-                results[query_name]= {'index_list': index_list,
-                                      'distance_list': distance_list}
+                results[query_name]= [gallery_names[index_img] for index_img in index_list]
 
         return results
 
