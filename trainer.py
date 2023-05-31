@@ -263,8 +263,8 @@ class UnsupervisedTransferLearnTrainer:
             utils.log_run(train_loss, val_loss, test_loss)
 
             # Save the model checkpoints
-            #if e % self.save_checkpoint_every == 0 or e == (self.max_epochs - 1):  # if the current epoch is in the interval, or is the last epoch -> save
-            #    self.save(e, is_best=False)                
+            if e % self.save_checkpoint_every == 0 or e == (self.max_epochs - 1):  # if the current epoch is in the interval, or is the last epoch -> save
+                self.save(e, is_best=False)                
 
             # Early Stopping
             if test_loss > best_test_loss:
