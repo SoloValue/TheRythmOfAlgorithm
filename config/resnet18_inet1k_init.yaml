@@ -4,7 +4,7 @@ general:
 model:
   architecture: resnet18
   pretrained: True
-  num_classes: 3000
+  num_classes: 500
 
 training:
   optimizer: adam

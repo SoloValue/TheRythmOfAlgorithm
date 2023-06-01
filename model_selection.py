@@ -24,19 +24,19 @@ transform = T.Compose([
 
 list_loss_function = [
         "triplet",
-        "MSE"
+        #"MSE"
 ]
 
 list_model_type = [
-        "CNNencoder",
-        "ResNet18",
+        #"CNNencoder",
+        #"ResNet18",
         "PerResNet18",
-        "ResNet50",
-        "PerResNet50",
-        "VGG11_BN",
-        "PerVGG11_BN",
-        "VGG13_BN",
-        "PerVGG13_BN"
+        #"ResNet50",
+        #"PerResNet50",
+        #"VGG11_BN",
+        #"PerVGG11_BN",
+        #"VGG13_BN",
+        #"PerVGG13_BN"
 ]
 
 for model_type in list_model_type:

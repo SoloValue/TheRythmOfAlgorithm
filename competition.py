@@ -13,8 +13,8 @@ from trainer import UnsupervisedTransferLearnTrainer
 """ This file is for: choose model -> feed query and gallery to model -> get results -> submit """
 
 ##PARAMETERS
-MODEL_PATH = './saved_models/triplet_PerVGG13_BN/best.pth'
-model_to_run = "PerVGG13_BN"   # INSERT ON COMP DAY !!!!!
+MODEL_PATH = './saved_models/triplet_PerResNet18/best.pth'
+model_to_run = "PerResNet18"   # INSERT ON COMP DAY !!!!!
 top_n = 10                     # INSERT ON COMP DAY (number of k neighbours for knn)
 
 config_path = "./config/resnet18_inet1k_init.yaml"
@@ -80,7 +80,7 @@ res = dict()
 res = results
 
 mydata["images"] = res
-print(mydata)
+#print(mydata)
 
 ## SUBMIT final_results
 def submit(results, url="https://competition-production.up.railway.app/results/"): 
