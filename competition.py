@@ -70,7 +70,7 @@ print("\tModel loaded")
 # SARA: ho creato comp_step nel trainer.py, uguale al test_step ma lavora con query e gallery in due directory separate
 trainer = UnsupervisedTransferLearnTrainer(encoder, config["training"])  # SARA: CAMBIARE CONFIG?
 
-results = trainer.comp_step(query_loader, gallery_loader, top_n)
+results, distance_list = trainer.comp_step(query_loader, gallery_loader, top_n)
 
 ## 'PACK UP' RESULTS AND SUBMIT THEM
 mydata = dict()
@@ -99,7 +99,7 @@ result = submit(mydata)
 # save results
 if result: 
         ress = dict()
-        ress[model_to_run] = dict({"results": mydata["images"], "accuracy": result['results']})
+        ress[model_to_run] = dict({"accuracy": result['results'], "results": mydata["images"], "distances": distance_list})
 
         with open("comp_results.json", 'w') as fp:
                 json.dump(ress, fp, indent=4)

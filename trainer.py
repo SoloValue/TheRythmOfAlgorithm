@@ -238,12 +238,12 @@ class UnsupervisedTransferLearnTrainer:
                 #print(target_embedding[q].shape())
                 distance_list, indices_list = knn.kneighbors(target_embedding[q].reshape(1, -1), return_distance=True)
                 indices_list = indices_list.tolist()
-                distance_list = distance_list.tolist()
+                #distance_list = distance_list.tolist()    sara commented this bc we need it as list of lists to plot for different queries
                 index_list = indices_list[0]
 
-                results[query_name]= [gallery_names[index_img] for index_img in index_list]
+                results[query_name] = [gallery_names[index_img] for index_img in index_list]
 
-        return results
+        return results, distance_list      # results are for submitting, distance_list for plotting purposes
 
     def train(self, train_loader, val_loader, test_loader):
 
