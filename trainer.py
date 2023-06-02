@@ -233,17 +233,19 @@ class UnsupervisedTransferLearnTrainer:
             knn.fit(embedding)
             #### SARA: CAPIRE COME GESTIRE UNA QUERY PER VOLTA! Per ora fatto così ####
             results = dict()
+            distances = dict()
             for q,query_name in enumerate(query_names):
                 #print(target_embedding.shape())
                 #print(target_embedding[q].shape())
                 distance_list, indices_list = knn.kneighbors(target_embedding[q].reshape(1, -1), return_distance=True)
                 indices_list = indices_list.tolist()
-                distance_list = distance_list.tolist()    #sara commented this bc we need it as list of lists to plot for different queries
+                distance_list = distance_list.tolist()    
                 index_list = indices_list[0]
 
                 results[query_name] = [gallery_names[index_img] for index_img in index_list]
+                distances[query_name] = distance_list
 
-        return results, distance_list      # results are for submitting, distance_list for plotting purposes
+        return results, distances        # results are for submitting, distances for plotting purposes
 
     def train(self, train_loader, val_loader, test_loader):
 
