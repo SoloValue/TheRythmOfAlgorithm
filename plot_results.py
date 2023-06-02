@@ -60,7 +60,7 @@ for q,query_name in enumerate(query_names[0:3]):
         # plt.imshow(simimg)
         # plt.annotate(f'd: {distances[s]}', (100,0))
         # plt.axis('off')
-
+plt.savefig('Queries results.png')
 plt.show()
 
 
