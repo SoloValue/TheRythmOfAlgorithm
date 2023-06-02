@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from matplotlib import ticker
 import json
 import torchvision
 import torchvision.transforms as T
@@ -31,7 +32,8 @@ for q,query_name in enumerate(query_names[0:3]):
     img = PIL.Image.open(img_path).convert('RGB')
 
     axes[q, 0].imshow(img)
-    axes[q, 0].annotate(f'Query {q}', (100,0))
+    axes[q, 0].text(0.5, 1.05, f'Query {q}', ha='center', va='bottom', transform=axes[q, 0].transAxes, fontsize= 8,fontstretch='ultra-condensed')
+    #axes[q, 0].annotate(f'Query {q}', (100,0))
     axes[q, 0].axis('off')
 
     # Alternative..
@@ -47,8 +49,10 @@ for q,query_name in enumerate(query_names[0:3]):
         simimg_path = os.path.join(gallery_path + simimg_name)
         simimg = PIL.Image.open(simimg_path).convert('RGB')
 
+        
         axes[q, s+1].imshow(simimg)
-        axes[q, s+1].annotate(f'd: {distances[s]}', (100,0))
+        #axes[q, s+1].annotate(f'd: {distances[s]}', (100,0))
+        axes[q, s+1].text(0.5, 1.05, f'd: {distances[s]} ', ha='center', va='bottom', transform=axes[q, s+1].transAxes, fontsize= 8,fontstretch='ultra-condensed')
         axes[q, s+1].axis('off')
 
         # Alternative...
@@ -58,3 +62,5 @@ for q,query_name in enumerate(query_names[0:3]):
         # plt.axis('off')
 
 plt.show()
+
+
