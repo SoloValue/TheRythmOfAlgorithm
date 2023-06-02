@@ -66,9 +66,9 @@ query_dataset, query_loader, gallery_dataset, gallery_loader = get_comp_dataset(
 encoder.cuda()
 encoder.load_state_dict(torch.load(MODEL_PATH, map_location=DEVICE))
 print("\tModel loaded")
+
 ## FEED QUERY AND GALLERY TO MODEL
-# SARA: ho creato comp_step nel trainer.py, uguale al test_step ma lavora con query e gallery in due directory separate
-trainer = UnsupervisedTransferLearnTrainer(encoder, config["training"])  # SARA: CAMBIARE CONFIG?
+trainer = UnsupervisedTransferLearnTrainer(encoder, config["training"])  
 
 results, distances = trainer.comp_step(query_loader, gallery_loader, top_n)
 
