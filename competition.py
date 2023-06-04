@@ -9,13 +9,13 @@ from utils import *
 from network import *
 from trainer import UnsupervisedTransferLearnTrainer
 
-###### SARA ######
-""" This file is for: choose model -> feed query and gallery to model -> get results -> submit """
+
+# === This file is for: choose model -> feed query and gallery to model -> get results -> submit === #
 
 ##PARAMETERS
 MODEL_PATH = './saved_models/triplet_PerResNet18/best.pth'
-model_to_run = "PerResNet18"   # INSERT ON COMP DAY !!!!!
-top_n = 10                     # INSERT ON COMP DAY (number of k neighbours for knn)
+model_to_run = "PerResNet18"   # Insert on competition day
+top_n = 10                     # Insert on competition day (number of k neighbours for knn)
 
 config_path = "./config/resnet18_inet1k_init.yaml"
 with open(config_path, "r") as f:
@@ -36,10 +36,7 @@ TRANSFORM = T.Compose([
         T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]), #normalization for the ResNet18
     ])
 
-""" give as input to model """ 
-
-## SELECT MODEL
-
+## === Model Selection == ##
 
 if model_to_run == "CNNencoder": 
     encoder = CNNencoder() 
@@ -74,15 +71,15 @@ results, distances = trainer.comp_step(query_loader, gallery_loader, top_n)
 
 ## 'PACK UP' RESULTS AND SUBMIT THEM
 mydata = dict()
-mydata["groupname"] = f"The Rythm of Algorithm"   # ADD MODEL NAME SO WE KNOW WHICH ONE IT IS IN THE CLASSIFICA
-# TO FINISH ON COMPETITION DAY DEPENDING ON WHAT FORM THEY WANT FOR THE RANKING
+mydata["groupname"] = f"The Rythm of Algorithm"   
+
 res = dict()
 res = results
 
 mydata["images"] = res
 #print(mydata)
 
-## SUBMIT final results
+## === Final Results Submission === #
 def submit(results, url="https://competition-production.up.railway.app/results/"): 
     res = json.dumps(results) 
     response = requests.post(url, res) 
@@ -96,7 +93,7 @@ def submit(results, url="https://competition-production.up.railway.app/results/"
 
 result = submit(mydata)
 
-# save results
+## === save results in a .json file named "comp_results.json" === ##
 if result: 
         ress = dict()
         ress[model_to_run] = dict({"accuracy": result['results'], "results": mydata["images"], "distances": distances})

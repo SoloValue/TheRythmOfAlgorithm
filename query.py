@@ -28,8 +28,6 @@ if __name__ == "__main__":
 
     test_dataset, test_loader = get_test_dataset(config['test_dataset'], TRANSFORM)
 
-    #rsync -r -e 'ssh -p 61099' azure_dir/ disi@ml-lab-55bc589a-5fd7-4f52-b071-64c2815e9b95.westeurope.cloudapp.azure.com:/home/disi/ML_project
-
     encoder = PersonalizedResNet18(config["model"])
     encoder.cuda()
     encoder.load_state_dict(torch.load(f'{config["training"]["model_path"]}best.pth', map_location=DEVICE))
@@ -45,6 +43,6 @@ if __name__ == "__main__":
         img = test_dataset[index]
         ax=plt.subplot(3,4,i+1)
         plt.imshow(img.permute(1,2,0))
-        plt.annotate(f"d: {distance_list[0][i]}", (100,0))#:.7f
+        plt.annotate(f"d: {distance_list[0][i]}", (100,0))
         plt.axis("off")
     plt.show()

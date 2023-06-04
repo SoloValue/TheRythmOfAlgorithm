@@ -58,6 +58,7 @@ class CNNencoder(nn.Module):
 
         return x
 
+
 class ResNet18(torch.nn.Module):
     def __init__(self, config):
         super(ResNet18, self).__init__()
@@ -72,6 +73,8 @@ class ResNet18(torch.nn.Module):
     @torch.no_grad()
     def inference(self, x):
         return self.net(x)
+    
+    
 
 class PersonalizedResNet18(torch.nn.Module):
     def __init__(self, config):
@@ -81,7 +84,9 @@ class PersonalizedResNet18(torch.nn.Module):
         self.net = torchvision.models.resnet18(weights=weights)
         # remove the last FC layer
         num_output_feats = self.net.fc.in_features   # dim  of the features
-        self.net.fc = torch.nn.Linear(num_output_feats, config["num_classes"])  # Initialize a new fully connected layer, with num_output = num_classes
+        
+        # Initialize a new fully connected layer, with num_output = num_classes
+        self.net.fc = torch.nn.Linear(num_output_feats, config["num_classes"])  
         
     def forward(self, x):
         logits = self.net(x)
@@ -90,6 +95,8 @@ class PersonalizedResNet18(torch.nn.Module):
     @torch.no_grad()
     def inference(self, x):
         return self.net(x)
+    
+    
 
 class ResNet50(torch.nn.Module):
     def __init__(self, config):
@@ -105,6 +112,8 @@ class ResNet50(torch.nn.Module):
     @torch.no_grad()
     def inference(self, x):
         return self.net(x)
+    
+    
 
 class PersonalizedResNet50(torch.nn.Module):
     def __init__(self, config):
@@ -123,6 +132,8 @@ class PersonalizedResNet50(torch.nn.Module):
     @torch.no_grad()
     def inference(self, x):
         return self.net(x)
+    
+    
 
 class VGG11_BN(torch.nn.Module):
     def __init__(self, config):
@@ -138,6 +149,8 @@ class VGG11_BN(torch.nn.Module):
     @torch.no_grad()
     def inference(self, x):
         return self.net(x)
+    
+    
 
 class PersonalizedVGG11_BN(torch.nn.Module):
     def __init__(self, config):
@@ -156,6 +169,8 @@ class PersonalizedVGG11_BN(torch.nn.Module):
     @torch.no_grad()
     def inference(self, x):
         return self.net(x)
+    
+    
 
 class VGG13_BN(torch.nn.Module):
     def __init__(self, config):
@@ -171,6 +186,8 @@ class VGG13_BN(torch.nn.Module):
     @torch.no_grad()
     def inference(self, x):
         return self.net(x)
+    
+    
 
 class PersonalizedVGG13_BN(torch.nn.Module):
     def __init__(self, config):

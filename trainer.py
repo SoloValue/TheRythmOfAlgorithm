@@ -27,11 +27,13 @@ class UnsupervisedTransferLearnTrainer:
 
     def save(self, epoch, is_best=False):
         if is_best:
-            torch.save(self.model.state_dict(), f'{self.config["model_path"]}best.pth') # in this case we store only the model
+            # in this case we store only the model
+            torch.save(self.model.state_dict(), f'{self.config["model_path"]}best.pth') 
         else:
             save_dict = dict(
                 model = self.model.state_dict(),
-                optimizer = self.optimizer.state_dict(), # optimizer has parameters as well, you want to save this to be able to go back to this exact stage of training
+                # optimizer has parameters as well, you want to save this to be able to go back to this exact stage of training
+                optimizer = self.optimizer.state_dict(), 
             )
             torch.save(save_dict, f'{self.checkpoint_path}epoch-{epoch}.pth')
 
@@ -53,8 +55,9 @@ class UnsupervisedTransferLearnTrainer:
                 pos_enc = self.model(pos)
                 neg_enc = self.model(neg)
 
-                # Apply the loss
-                loss = self.cost_function(anc_enc, pos_enc, neg_enc) #Triplet loss
+                # === Apply the loss == #
+                #Triplet loss
+                loss = self.cost_function(anc_enc, pos_enc, neg_enc) 
             elif self.config["loss_function"] == "MSE":
                 # Load data into GPU
                 anc = image_vector[0].cuda()
@@ -79,8 +82,8 @@ class UnsupervisedTransferLearnTrainer:
             # Reset the gradients
             self.optimizer.zero_grad()
 
-            # Better print something, no?
-            samples += anc.shape[0] #add the number of images in the batch (!! anc and pos are batches !!)
+            #add the number of images in the batch (anc and pos are batches)
+            samples += anc.shape[0] 
             cumulative_loss += loss.item()
 
         return cumulative_loss / samples
@@ -119,8 +122,8 @@ class UnsupervisedTransferLearnTrainer:
                 else:
                     print("Choose a proper error function!")
                     return -1
-
-                samples += anc.shape[0] #add the number of images in the batch (!! anc and pos are batches !!)
+                #add the number of images in the batch (anc and pos are batches)
+                samples += anc.shape[0] 
                 cumulative_loss += loss.item()
 
         return cumulative_loss / samples
@@ -172,13 +175,13 @@ class UnsupervisedTransferLearnTrainer:
                     labels["1"].append(i)
                 else:
                     labels["2"].append(i)
-            
-            ck = 0     # sum of correct amatches among top-k ranking
+                    
+            # sum of correct matches among top-k ranking
+            ck = 0     
             for i in index_list:
                 if i in labels["1"]:
                     ck += 1
-                #else:
-                #    break
+            
             
             if len(labels["1"]) > 0:
                 test_error = 1-(ck / len(labels["1"]))
@@ -193,8 +196,8 @@ class UnsupervisedTransferLearnTrainer:
         """ 
         Takes query, gallery and number of top-k to rank.
         Returns:
-            distance_list : list of distance of i-th gallery-image from query;
-            indices_list : list of image indexes corresponding in distances_list;
+        -  distance_list : list of distance of i-th gallery-image from query;
+        -  indices_list : list of image indexes corresponding in distances_list;
         """
 
         self.model.eval()
@@ -264,8 +267,10 @@ class UnsupervisedTransferLearnTrainer:
 
             utils.log_run(train_loss, val_loss, test_loss)
 
-            # Save the model checkpoints
-            if e % self.save_checkpoint_every == 0 or e == (self.max_epochs - 1):  # if the current epoch is in the interval, or is the last epoch -> save
+            # == Save the model checkpoints == #
+            
+            # if the current epoch is in the interval, or is the last epoch -> save
+            if e % self.save_checkpoint_every == 0 or e == (self.max_epochs - 1):  
                 self.save(e, is_best=False)                
 
             # Early Stopping

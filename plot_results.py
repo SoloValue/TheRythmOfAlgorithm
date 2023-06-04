@@ -33,15 +33,7 @@ for q,query_name in enumerate(query_names[0:3]):
 
     axes[q, 0].imshow(img)
     axes[q, 0].text(0.5, 1.05, f'Query {q}', ha='center', va='bottom', transform=axes[q, 0].transAxes, fontsize= 8,fontstretch='ultra-condensed')
-    #axes[q, 0].annotate(f'Query {q}', (100,0))
     axes[q, 0].axis('off')
-
-    # Alternative..
-    # plt.subplot(num_queries, num_similar_images + 1, (num_similar_images + 1) * q + 1) 
-    # OR ax=plt.subplot(3,4,q+1)
-    # plt.imshow(img)
-    # plt.annotate(f'Query {q}', (100,0))#:.7f
-    # plt.axis('off')
 
     similar_images = ress['PerResNet18']['results'][query_name]
     distances = ress['PerResNet18']['distances'][query_name][0]
@@ -49,17 +41,10 @@ for q,query_name in enumerate(query_names[0:3]):
         simimg_path = os.path.join(gallery_path + simimg_name)
         simimg = PIL.Image.open(simimg_path).convert('RGB')
 
-        
         axes[q, s+1].imshow(simimg)
-        #axes[q, s+1].annotate(f'd: {distances[s]}', (100,0))
         axes[q, s+1].text(0.5, 1.05, f'd: {distances[s]} ', ha='center', va='bottom', transform=axes[q, s+1].transAxes, fontsize= 8,fontstretch='ultra-condensed')
         axes[q, s+1].axis('off')
 
-        # Alternative...
-        #plt.subplot(num_queries, num_similar_images + 1, (num_similar_images + 1) * q + s + 2)
-        # plt.imshow(simimg)
-        # plt.annotate(f'd: {distances[s]}', (100,0))
-        # plt.axis('off')
 plt.savefig('Queries results.png')
 plt.show()
 

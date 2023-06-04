@@ -15,8 +15,6 @@ class MSE_Dataset(torch.utils.data.Dataset):
             T.RandomPerspective(0.3),
             T.RandomCrop(size=(180,180)),
             T.RandomHorizontalFlip(p=0.7),
-            #T.RandomGrayscale(p=0.2),
-            #T.RandomInvert(p=0.2),
             T.ColorJitter(brightness=.5, contrast=.3), 
             T.Resize((228,228), antialias=None),           
             ])
@@ -125,6 +123,7 @@ class TestDataset(torch.utils.data.Dataset):
 
         return image
     
+    
 class TestLoader(torch.utils.data.DataLoader):
     def __init__(self, dataset, batch_size, shuffle):
         super(TestLoader, self).__init__(dataset, batch_size=batch_size, shuffle=shuffle)
@@ -135,16 +134,16 @@ def get_train_dataset(config, loss_function, transform):
         full_dataset = MSE_Dataset(config["data_root"], transform)
     elif loss_function == "triplet":
         full_dataset = Triplet_Dataset(config["data_root"], transform)
-    #train_loader = torch.utils.data.DataLoader(full_dataset, batch_size = config["batch_size"], shuffle=False)
-
+    
+    
     num_samples = len(full_dataset)
     training_samples = int(num_samples * 0.7 + 1)
     validation_samples = num_samples - training_samples
     training_data, validation_data = torch.utils.data.random_split(full_dataset,
                                                                    [training_samples, validation_samples])
     # Create the dataloaders
-    train_loader = torch.utils.data.DataLoader(training_data, config["batch_size"], shuffle=True)#, num_workers=4)
-    val_loader = torch.utils.data.DataLoader(validation_data, config["batch_size"], shuffle=False)#, num_workers=4)
+    train_loader = torch.utils.data.DataLoader(training_data, config["batch_size"], shuffle=True)
+    val_loader = torch.utils.data.DataLoader(validation_data, config["batch_size"], shuffle=False)
 
     return full_dataset, train_loader, val_loader
 

@@ -96,7 +96,7 @@ for model_type in list_model_type:
 
 
 
-""" select best models to use for the submit """
+# === Best models Selection for the submit === #
 
 def find_best_models():
 
@@ -111,13 +111,13 @@ def find_best_models():
 
     print(best_models)
 
-    ## now to find the best 4
+    ##  === now to find the best 4 === ##
     global_min_loss = float('inf')
     top_four = []
     for model in best_models:
         if best_models[model]["minimum_error"] < global_min_loss:     # best model so far
             global_min_loss = best_models[model]['minimum_error']     # update the global min loss
-            top_four.insert(0, model)                    # add new best (model name) in top position
+            top_four.insert(0, model)                                 # add new best (model name) in top position
 
 
     print(best_models[top_four[0]]["minimum_error"])
