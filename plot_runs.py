@@ -35,6 +35,7 @@ for model in model_and_architecture:
     ax3.plot([i for i in range(len(val_l))], val_l, label = model)
 plt.xlabel('Epochs')
 plt.ylabel('Error')
+plt.text((2.0, 2.0), 'Running results')
 plt.legend(title = 'Models', loc='upper right', bbox_to_anchor=(0.6, 3, 0.5, 0.5))
 plt.savefig('Models running results.png')
 plt.show()

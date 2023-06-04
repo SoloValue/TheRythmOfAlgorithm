@@ -28,8 +28,8 @@ draw = ImageDraw.Draw(image)
 # Calculate text size
 text_size = draw.textsize(text)
 # Calculate text position
-x = image.width // 2 - text_size[0] // 2
-y = image.height - 240 - text_size[1] // 2
+x = image.width // 2 
+y = image.height - 240 
 # Draw text on image
 draw.text((x, y), text, fill='black')
 # Save the new image with the caption
