@@ -1,5 +1,6 @@
 import json
 import matplotlib.pyplot as plt
+import PIL
 
 
 with open("runs_recap.json", "r") as file:
@@ -35,7 +36,6 @@ for model in model_and_architecture:
 plt.xlabel('Epochs')
 plt.ylabel('Error')
 plt.legend(title = 'Models', loc='upper right', bbox_to_anchor=(0.6, 3, 0.5, 0.5))
+plt.savefig('Models running results.png')
 plt.show()
-
-
 

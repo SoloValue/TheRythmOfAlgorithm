@@ -5,7 +5,7 @@ import torchvision
 import torchvision.transforms as T
 import torch
 import yaml
-import PIL 
+import PIL
 import os
 
 from dataset import TestDataset, TestLoader, get_comp_dataset
@@ -62,5 +62,6 @@ for q,query_name in enumerate(query_names[0:3]):
         # plt.axis('off')
 plt.savefig('Queries results.png')
 plt.show()
+
 
 

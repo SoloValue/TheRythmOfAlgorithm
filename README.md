@@ -21,10 +21,11 @@ This model works as an image search engine that takes a query image as input and
 - `runs_recap.json`: JSON file with training performances of models.
 - `trainer.py`: defines train, validation, test and competition steps.
 - `utils.py`: contains helper functions.
+
 ## Authors
 
 - Elisa Basso
-- Marta Faggian
+- Marta Faggian [@martafaggian](https://github.com/martafaggian)
 - Matteo Moscatelli
 - Sara Tegoni [@sraatgn](https://github.com/sraatgn)
 
