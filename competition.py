@@ -52,9 +52,9 @@ elif model_to_run == "VGG11_BN":
     encoder = VGG11_BN(config["model"])
 elif model_to_run == "PerVGG11_BN":
     encoder = PersonalizedVGG11_BN(config["model"])
-elif model_type == "VGG13_BN":
+elif model_to_run == "VGG13_BN":
     encoder = VGG13_BN(config["model"])
-elif model_type == "PerVGG13_BN":
+elif model_to_run == "PerVGG13_BN":
     encoder = PersonalizedVGG13_BN(config["model"])
 
 ## PREPARE
