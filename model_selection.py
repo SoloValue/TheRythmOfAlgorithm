@@ -92,7 +92,7 @@ for model_type in list_model_type:
         trainer.train(train_loader, val_loader, test_loader)
         print("")
 
-        save_recap("runs_recap.json")
+        save_recap("json_files/runs_recap.json")
 
 
 

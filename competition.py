@@ -77,7 +77,6 @@ res = dict()
 res = results
 
 mydata["images"] = res
-#print(mydata)
 
 ## === Final Results Submission === #
 def submit(results, url="https://competition-production.up.railway.app/results/"): 
@@ -98,6 +97,6 @@ if result:
         ress = dict()
         ress[model_to_run] = dict({"accuracy": result['results'], "results": mydata["images"], "distances": distances})
 
-        with open("comp_results.json", 'w') as fp:
+        with open("json_files/comp_results.json", 'w') as fp:
                 json.dump(ress, fp, indent=4)
         print("Results saved in .json!")

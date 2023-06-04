@@ -15,7 +15,7 @@ with open(config_path, "r") as f:
     config = yaml.safe_load(f)
 
 # load results as a dictionary
-ress = json.load(open('comp_results.json', 'r'))
+ress = json.load(open('json_files/comp_results.json', 'r'))
 # load image datasets & paths 
 query_dataset, query_loader, gallery_dataset, gallery_loader = get_comp_dataset(config['competition_code'], transform=None)
 query_path = config["competition_code"]["query_root"]
