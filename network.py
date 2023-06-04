@@ -3,10 +3,6 @@ import torch
 import torch.nn as nn
 
 class CNNencoder(nn.Module):
-    """
-    A simple Convolutional Encoder Model
-    """
-
     def __init__(self):
         super().__init__()
 
@@ -35,7 +31,6 @@ class CNNencoder(nn.Module):
         self.lin3 = nn.Linear(256*7*7, 256*7)   #n.features: 1792
 
     def forward(self, x):
-        # Downscale the image with conv maxpool etc.
         x = self.conv1(x)
         x = self.relu1(x)
         x = self.maxpool1(x)
@@ -56,8 +51,6 @@ class CNNencoder(nn.Module):
         x = self.relu5(x)
         x = self.maxpool5(x)
 
-        #x = self.flat(x)
-        
         x = x.view(x.shape[0],-1)
         x = self.lin1(x)
         x = self.lin2(x)
@@ -76,11 +69,9 @@ class ResNet18(torch.nn.Module):
         logits = self.net(x)
         return logits
 
-    # decorator, is used to tell pytorch to don't compute gradients when this function is called
     @torch.no_grad()
     def inference(self, x):
         return self.net(x)
-
 
 class PersonalizedResNet18(torch.nn.Module):
     def __init__(self, config):
@@ -96,7 +87,6 @@ class PersonalizedResNet18(torch.nn.Module):
         logits = self.net(x)
         return logits
 
-    # decorator, is used to tell pytorch to don't compute gradients when this function is called
     @torch.no_grad()
     def inference(self, x):
         return self.net(x)
@@ -112,11 +102,9 @@ class ResNet50(torch.nn.Module):
         logits = self.net(x)
         return logits
 
-    # decorator, is used to tell pytorch to don't compute gradients when this function is called
     @torch.no_grad()
     def inference(self, x):
         return self.net(x)
-
 
 class PersonalizedResNet50(torch.nn.Module):
     def __init__(self, config):
@@ -132,7 +120,6 @@ class PersonalizedResNet50(torch.nn.Module):
         logits = self.net(x)
         return logits
 
-    # decorator, is used to tell pytorch to don't compute gradients when this function is called
     @torch.no_grad()
     def inference(self, x):
         return self.net(x)
@@ -148,7 +135,6 @@ class VGG11_BN(torch.nn.Module):
         logits = self.net(x)
         return logits
 
-    # decorator, is used to tell pytorch to don't compute gradients when this function is called
     @torch.no_grad()
     def inference(self, x):
         return self.net(x)
@@ -167,7 +153,6 @@ class PersonalizedVGG11_BN(torch.nn.Module):
         logits = self.net(x)
         return logits
 
-    # decorator, is used to tell pytorch to don't compute gradients when this function is called
     @torch.no_grad()
     def inference(self, x):
         return self.net(x)
@@ -183,7 +168,6 @@ class VGG13_BN(torch.nn.Module):
         logits = self.net(x)
         return logits
 
-    # decorator, is used to tell pytorch to don't compute gradients when this function is called
     @torch.no_grad()
     def inference(self, x):
         return self.net(x)
@@ -202,10 +186,6 @@ class PersonalizedVGG13_BN(torch.nn.Module):
         logits = self.net(x)
         return logits
 
-    # decorator, is used to tell pytorch to don't compute gradients when this function is called
     @torch.no_grad()
     def inference(self, x):
         return self.net(x)
-
-
-

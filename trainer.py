@@ -39,7 +39,7 @@ class UnsupervisedTransferLearnTrainer:
         samples = 0.
         cumulative_loss = 0.
 
-        self.model.train()  # Strictly needed if network contains layers which has different behaviours between train and test
+        self.model.train()
         for batch_idx, image_vector in enumerate(data_loader):
             
             if self.config["loss_function"] == "triplet":
@@ -89,7 +89,7 @@ class UnsupervisedTransferLearnTrainer:
         samples = 0.
         cumulative_loss = 0.
 
-        self.model.eval()  # Strictly needed if network contains layers which has different behaviours between train and test
+        self.model.eval() 
         with torch.no_grad():
             for batch_idx, image_vector in enumerate(data_loader):
                 if self.config["loss_function"] == "triplet":
@@ -120,7 +120,6 @@ class UnsupervisedTransferLearnTrainer:
                     print("Choose a proper error function!")
                     return -1
 
-                # Better print something, no?
                 samples += anc.shape[0] #add the number of images in the batch (!! anc and pos are batches !!)
                 cumulative_loss += loss.item()
 
@@ -163,7 +162,6 @@ class UnsupervisedTransferLearnTrainer:
 
             index_list = indices_list[0]
 
-            ######################## ELISA & SARA #############################
             labels = {
                 "1" : [],
                 "2" : []
@@ -192,9 +190,12 @@ class UnsupervisedTransferLearnTrainer:
         return distance_list, indices_list, tot_test_error/len(target_letters)
 
     def comp_step(self, query_loader: TestLoader, gallery_loader: TestLoader, top_n: int):
-        """ takes query, gallery and number of top-k to rank. Returns:
-        distance_list : list of distance of i-th gallery-image from query;
-        indices_list : list of image indexes corresponding in distances_list"""
+        """ 
+        Takes query, gallery and number of top-k to rank.
+        Returns:
+            distance_list : list of distance of i-th gallery-image from query;
+            indices_list : list of image indexes corresponding in distances_list;
+        """
 
         self.model.eval()
 
@@ -231,7 +232,6 @@ class UnsupervisedTransferLearnTrainer:
 
             knn = NearestNeighbors(n_neighbors=top_n, metric="cosine")
             knn.fit(embedding)
-            #### SARA: CAPIRE COME GESTIRE UNA QUERY PER VOLTA! Per ora fatto così ####
             results = dict()
             distances = dict()
             for q,query_name in enumerate(query_names):

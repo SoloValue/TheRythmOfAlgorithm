@@ -24,19 +24,19 @@ transform = T.Compose([
 
 list_loss_function = [
         "triplet",
-        #"MSE"
+        "MSE"
 ]
 
 list_model_type = [
-        #"CNNencoder",
-        #"ResNet18",
+        "CNNencoder",
+        "ResNet18",
         "PerResNet18",
-        #"ResNet50",
-        #"PerResNet50",
-        #"VGG11_BN",
-        #"PerVGG11_BN",
-        #"VGG13_BN",
-        #"PerVGG13_BN"
+        "ResNet50",
+        "PerResNet50",
+        "VGG11_BN",
+        "PerVGG11_BN",
+        "VGG13_BN",
+        "PerVGG13_BN"
 ]
 
 for model_type in list_model_type:
@@ -98,7 +98,6 @@ for model_type in list_model_type:
 
 """ select best models to use for the submit """
 
-# SARA (rielaborato codice di marta sopra in una funzione) - TOP 4 MODELS
 def find_best_models():
 
     with open("runs_recap.json", "r") as read_file:
@@ -120,9 +119,7 @@ def find_best_models():
             global_min_loss = best_models[model]['minimum_error']     # update the global min loss
             top_four.insert(0, model)                    # add new best (model name) in top position
 
-    #print("Minimum loss:", minimum_loss)
-    #print("Best model:", best_model)
-    #print(top_four[:4])
+
     print(best_models[top_four[0]]["minimum_error"])
     print(best_models[top_four[1]]["minimum_error"])
     print(best_models[top_four[2]]["minimum_error"])            

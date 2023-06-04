@@ -6,13 +6,6 @@ import PIL
 import random
 
 class MSE_Dataset(torch.utils.data.Dataset):
-    """
-    Creates a PyTorch dataset from folder, returning two tensor images.
-    Args: 
-    main_dir : directory where images are stored.
-    transform (optional) : torchvision transforms to be applied while making dataset
-    """
-
     def __init__(self, main_dir, transform=None):
         self.main_dir = main_dir
         self.transform = transform
@@ -42,13 +35,6 @@ class MSE_Dataset(torch.utils.data.Dataset):
         return tensor_image, self.target_transformation(tensor_image)
     
 class Triplet_Dataset(torch.utils.data.Dataset):
-    """
-    Creates a PyTorch dataset from folder, returning three tensor images for triplet loss. Anchor, positive and negative.
-    Args: 
-    main_dir : directory where images are stored.
-    transform (optional) : torchvision transforms to be applied while making dataset
-    """
-
     def __init__(self, main_dir, transform=None):
         self.main_dir = main_dir
         self.transform = transform
@@ -168,7 +154,7 @@ def get_test_dataset(config, transform):
 
     return test_dataset, test_loader
 
-#### SARA####
+
 def get_comp_dataset(config, transform):
     query_dataset = TestDataset(config["query_root"], transform)
     query_loader = TestLoader(query_dataset, batch_size = config["batch_size"], shuffle=False)
