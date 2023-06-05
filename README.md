@@ -24,8 +24,8 @@ This model works as an image search engine that takes a query image as input and
 
 ## Authors
 
-- Elisa Basso
+- Elisa Basso[@elisabasso00](https://github.com/elisabasso00)
 - Marta Faggian [@martafaggian](https://github.com/martafaggian)
-- Matteo Moscatelli
+- Matteo Moscatelli[@SoloValue](https://github.com/SoloValue)
 - Sara Tegoni [@sraatgn](https://github.com/sraatgn)
 
