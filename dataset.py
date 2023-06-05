@@ -42,8 +42,6 @@ class Triplet_Dataset(torch.utils.data.Dataset):
             T.RandomPerspective(0.3),
             T.RandomCrop(size=(180,180)),
             T.RandomHorizontalFlip(p=0.7),
-            #T.RandomGrayscale(p=0.2),
-            #T.RandomInvert(p=0.2),
             T.ColorJitter(brightness=.5, contrast=.3), 
             T.Resize((228,228), antialias=None),           
             ])
